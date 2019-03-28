@@ -28,6 +28,8 @@ public class ActionController : MonoBehaviour
     [SerializeField]
     private GameObject book2d;
 
+    private bool inhand = false;
+
     // Use this for initialization
     void Start()
     {
@@ -44,30 +46,41 @@ public class ActionController : MonoBehaviour
         CheckItem();        //어떤 아이템인지 보고 정보 표시
         if (Input.GetKeyDown(KeyCode.E))
         {
-            CanPickup();    //물체를 들 수 있는 함수
-        }
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            CanDrop();
+            if (inhand == false)//손에 들고 있는게 없음
+            {
+                PickupItem();    //물체를 들 수 있는 함수
+                //ItemFromInventory();
+            }
+            else //손에 들고 있는게 있음
+            {
+                DropItem();
+                //ItemToInventory();
+            }
         }
     }
 
     private void CheckItem()
     {
         if (Physics.Raycast(transform.position, transform.forward,  //transform.forward = transform.TransformDirection(Vector3,forward)
-                out hitinfo, range, layerMask1)) //광선쏘기(플레이어의위치,플레이어가 바라보는 z축방향, 충돌체정보, 사정거리,레이어마스크)
+                out hitinfo, range, layerMask1)) //광선쏘기(플레이어의위치,플레이어가 바라보는 z축방향, 충돌체정보, 사정거리, 레이어마스크)
         {
             pickupActivated = true;
             actionText.gameObject.SetActive(true);
-            if (hitinfo.transform.tag == "item")
+            if (got == false)
             {
-                actionText.text = "획득하려면" + "<color=yellow>" + "(E)" + "</color>";
+                if (hitinfo.transform.tag == "item1")
+                {
+                    actionText.text = "획득하려면" + "<color=yellow>" + "(E)" + "</color>";
+                }
+                else if (hitinfo.transform.tag == "item2")
+                {
+                    actionText.text = "읽어보려면" + "<color=yellow>" + "(E)" + "</color>";
+                }
             }
-            else if (hitinfo.transform.tag == "book")
+            else
             {
-                actionText.text = "책 펼쳐보기" + "<color=yellow>" + "(E)" + "</color>";
+                actionText.text = "";
             }
-
         }
         else
         {
@@ -77,9 +90,9 @@ public class ActionController : MonoBehaviour
         }
     }
 
-    private void CanPickup()
+    private void PickupItem()
     {
-        if (hitinfo.transform.tag == "item")
+        if (hitinfo.transform.tag == "item1")
         {
             if (got == false)
             {
@@ -89,9 +102,11 @@ public class ActionController : MonoBehaviour
                     {
                         GameObject child = hitinfo.transform.gameObject;
                         Debug.Log("획득했습니다.");
-                        /*Destroy(hitinfo.transform.gameObject);
-                        InfoDisappear();*/
-
+                        /*
+                        Destroy(hitinfo.transform.gameObject);
+                        pickupActivated = false;
+                        actionText.gameObject.SetActive(false);
+                        *///인벤토리 만들시에 안보이게 하기
                         child.transform.parent = this.transform;
                         //pickHere = child;
                         //child.transform.rotation = new Quaternion(0, 0, 0, 0);
@@ -103,7 +118,7 @@ public class ActionController : MonoBehaviour
                 }
             }
         }
-        else if (hitinfo.transform.tag == "book")
+        else if (hitinfo.transform.tag == "item2")
         {
             if (got == false)
             {
@@ -112,7 +127,7 @@ public class ActionController : MonoBehaviour
                     if (hitinfo.transform != null)
                     {
                         GameObject child = hitinfo.transform.gameObject;
-                        Debug.Log("펼쳐보았습니다");
+                        Debug.Log("읽고 있습니다");
 
                         child.transform.parent = this.transform;
                         got = true;
@@ -127,16 +142,29 @@ public class ActionController : MonoBehaviour
             }
         }
 
+        inhand = true;//손에 있음
     }
-    private void CanDrop()
+    private void DropItem()
     {
         if (got == true)
         {
-            GameObject inhand = this.transform.GetChild(0).gameObject;
-            inhand.GetComponent<Rigidbody>().useGravity = true;
-            inhand.GetComponent<BoxCollider>().isTrigger = false;
-            inhand.transform.parent = null;
+            GameObject child = this.transform.GetChild(0).gameObject;
+            child.GetComponent<Rigidbody>().useGravity = true;
+            child.GetComponent<BoxCollider>().isTrigger = false;
+            child.transform.parent = null;
             got = false;
         }
+
+        inhand = false;//손에 없음
     }
+
+    /*
+     private void UseItem()
+    {
+        if (this.transform.GetChild(0).gameObject != null)
+        {
+
+        }
+        else actionText.text = "손에 아이템이 읎어요";
+    }*/
 }
