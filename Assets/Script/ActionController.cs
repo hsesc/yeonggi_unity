@@ -13,8 +13,6 @@ public class ActionController : MonoBehaviour
 
     private RaycastHit hitinfo; // 충돌체 정보 저장
 
-    //private GameObject pickHere; //소지품
-
     //아이템 레이어에만 반응하도록 레이어마스크 설정
     [SerializeField]
     private LayerMask layerMask1;
@@ -26,9 +24,7 @@ public class ActionController : MonoBehaviour
     private Text actionText;
 
     [SerializeField]
-    private GameObject book2d;
-
-    private bool inhand = false;
+    private GameObject openBook;
 
     // Use this for initialization
     void Start()
@@ -46,7 +42,7 @@ public class ActionController : MonoBehaviour
         CheckItem();        //어떤 아이템인지 보고 정보 표시
         if (Input.GetKeyDown(KeyCode.E))
         {
-            if (inhand == false)//손에 들고 있는게 없음
+            if (got == false) //손에 들고 있는게 없음
             {
                 PickupItem();    //물체를 들 수 있는 함수
                 //ItemFromInventory();
@@ -68,11 +64,11 @@ public class ActionController : MonoBehaviour
             actionText.gameObject.SetActive(true);
             if (got == false)
             {
-                if (hitinfo.transform.tag == "item1")
+                if (hitinfo.transform.tag == "getItem")
                 {
                     actionText.text = "획득하려면" + "<color=yellow>" + "(E)" + "</color>";
                 }
-                else if (hitinfo.transform.tag == "item2")
+                else if (hitinfo.transform.tag == "readItem")
                 {
                     actionText.text = "읽어보려면" + "<color=yellow>" + "(E)" + "</color>";
                 }
@@ -86,76 +82,65 @@ public class ActionController : MonoBehaviour
         {
             pickupActivated = false;
             actionText.gameObject.SetActive(false);
-            book2d.gameObject.SetActive(false);
+            openBook.gameObject.SetActive(false);
         }
     }
 
     private void PickupItem()
     {
-        if (hitinfo.transform.tag == "item1")
+        if (hitinfo.transform.tag == "getItem")
         {
-            if (got == false)
+            if (pickupActivated)
             {
-                if (pickupActivated)
+                if (hitinfo.transform != null)
                 {
-                    if (hitinfo.transform != null)
-                    {
-                        GameObject child = hitinfo.transform.gameObject;
-                        Debug.Log("획득했습니다.");
-                        /*
-                        Destroy(hitinfo.transform.gameObject);
-                        pickupActivated = false;
-                        actionText.gameObject.SetActive(false);
-                        *///인벤토리 만들시에 안보이게 하기
-                        child.transform.parent = this.transform;
-                        //pickHere = child;
-                        //child.transform.rotation = new Quaternion(0, 0, 0, 0);
-                        got = true;
-                        child.GetComponent<Rigidbody>().useGravity = false;
-                        child.GetComponent<BoxCollider>().isTrigger = true;
-                        child.transform.localPosition = new Vector3(0, 0, 1);
-                    }
+                    GameObject child = hitinfo.transform.gameObject;
+                    Debug.Log("획득했습니다.");
+
+                    child.transform.parent = this.transform;
+                    got = true;
+                    child.GetComponent<Rigidbody>().useGravity = false;
+                    child.GetComponent<BoxCollider>().isTrigger = true;
+                    child.transform.localPosition = new Vector3(0, 0, 1);
                 }
             }
         }
-        else if (hitinfo.transform.tag == "item2")
+        else if (hitinfo.transform.tag == "readItem")
         {
-            if (got == false)
+            if (pickupActivated)
             {
-                if (pickupActivated)
+                if (hitinfo.transform != null)
                 {
-                    if (hitinfo.transform != null)
-                    {
-                        GameObject child = hitinfo.transform.gameObject;
-                        Debug.Log("읽고 있습니다");
+                    GameObject child = hitinfo.transform.gameObject;
+                    Debug.Log("읽고 있습니다");
 
-                        child.transform.parent = this.transform;
-                        got = true;
-                        child.GetComponent<Rigidbody>().useGravity = false;
-                        child.GetComponent<BoxCollider>().isTrigger = true;
-                        child.transform.localPosition = new Vector3(0, 0, 1);
+                    //오브젝트 완전 삭제
+                    /*Destroy(hitinfo.transform.gameObject);
+                    pickupActivated = false;
+                    actionText.gameObject.SetActive(false);*/
 
-                        book2d.gameObject.SetActive(true);//책 보여주기
+                    //pickHere = child;
+                    //child.transform.rotation = new Quaternion(0, 0, 0, 0);
+                        
+                    child.transform.parent = this.transform;
+                    got = true;
+                    child.GetComponent<Rigidbody>().useGravity = false;
+                    child.GetComponent<BoxCollider>().isTrigger = true;
+                    child.transform.localPosition = new Vector3(0, 0, 1);
 
-                    }
+                    openBook.gameObject.SetActive(true);//책 보여주기
+
                 }
             }
         }
-
-        inhand = true;//손에 있음
     }
     private void DropItem()
     {
-        if (got == true)
-        {
-            GameObject child = this.transform.GetChild(0).gameObject;
-            child.GetComponent<Rigidbody>().useGravity = true;
-            child.GetComponent<BoxCollider>().isTrigger = false;
-            child.transform.parent = null;
-            got = false;
-        }
-
-        inhand = false;//손에 없음
+        GameObject child = this.transform.GetChild(0).gameObject;
+        child.GetComponent<Rigidbody>().useGravity = true;
+        child.GetComponent<BoxCollider>().isTrigger = false;
+        child.transform.parent = null;
+        got = false;
     }
 
     /*

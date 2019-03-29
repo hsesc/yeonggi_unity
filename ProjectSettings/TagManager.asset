@@ -4,9 +4,9 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - item1
-  - item2
   - Item Database
+  - getItem
+  - readItem
   layers:
   - Default
   - TransparentFX

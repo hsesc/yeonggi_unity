@@ -28,6 +28,8 @@ public class Inventory : MonoBehaviour
     private Item draggedItem; // 드래그하고 있는 아이템을 담을 임시 그릇
     private int prevIndex; // 선택했던 아이템의 전 위치를 저장
 
+    private ActionController ac;
+
     // Use this for initialization
     void Start()
     {
@@ -41,8 +43,8 @@ public class Inventory : MonoBehaviour
         // 디비 가져와서 (태그 설정과 스크립트 작성이 되어 있어야함)
         db = GameObject.FindGameObjectWithTag("Item Database").GetComponent<itemDatabase>();
 
-        AddItem(1001); //아이템 ID 호출
-        AddItem(1002);
+        //AddItem("Key1"); //아이템 Name 호출
+        //AddItem("Book1");
 
         //RemoveItem(1001);
 
@@ -64,6 +66,7 @@ public class Inventory : MonoBehaviour
          *      inventory.Add(db.items[i]);
          * }
          */
+        ac = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<ActionController>();
     }
 
     void Update()
@@ -98,8 +101,8 @@ public class Inventory : MonoBehaviour
     void DrawInventory()
     {
         int k = 0;
-        Event e = Event.current;
-        // 마우스 상태 공동 사용을 위한 변수로 지정
+        Event e = Event.current; // 마우스 상태 공동 사용을 위한 변수로 지정
+        GameObject child = ac.transform.GetChild(0).gameObject; // 손에 든 아이템 가져오기
 
         for (int i = 0; i < slotX; i++)
         {
@@ -153,6 +156,14 @@ public class Inventory : MonoBehaviour
                             dragItem = false;
                             draggedItem = null;
                         }
+                        // 마우스 다운이면서 손에 아이템이 있을 때
+                        if (e.type == EventType.mouseDown && child != null) 
+                        {
+                            string name= child.name;
+                            Debug.Log(child.name);
+                            AddItem(name, k); //오버로딩
+                            child.SetActive(false);
+                        }
                     }
                 }
 
@@ -178,7 +189,7 @@ public class Inventory : MonoBehaviour
         return tooltip;
     }
 
-    void AddItem(int id)
+    void AddItem(string name)
     {
         for (int i = 0; i < inventory.Count; i++) // 전체 인벤토리를 모두 찾아서
         {
@@ -186,7 +197,7 @@ public class Inventory : MonoBehaviour
             {
                 for (int j = 0; j < db.items.Count; j++) // 디비에 있는 값까지 모두 찾은 다음에
                 {
-                    if (db.items[j].itemID == id) // 디비의 아이템의 ID와 입력한 ID가 같다면,
+                    if (db.items[j].itemName == name) // 디비의 아이템의 이름과 입력한 이름이 같다면,
                     {
                         inventory[i] = db.items[j]; // 빈 인벤토리에 디비에 저장된 아이템 적용
                         return;
@@ -195,21 +206,34 @@ public class Inventory : MonoBehaviour
             }
         }
     }
-
-    bool inventoryContains(int id)
+    void AddItem(string name, int k)
+    {
+        if (inventory[k].itemName == null) // 인벤토리가 빈자리면 
+        {
+            for (int j = 0; j < db.items.Count; j++) // 디비에 있는 값까지 모두 찾은 다음에
+            {
+                if (db.items[j].itemName == name) // 디비의 아이템의 이름과 입력한 이름이 같다면,
+                {
+                    inventory[k] = db.items[j]; // 빈 인벤토리에 디비에 저장된 아이템 적용
+                    return;
+                }
+            }
+        }
+    }
+    bool inventoryContains(string name)
     {
         for (int i = 0; i < inventory.Count; i++)
         {
-            return (inventory[i].itemID == id);
+            return (inventory[i].itemName == name);
         }
         return false;
     }
 
-    void RemoveItem(int id)
+    void RemoveItem(string name)
     {
         for (int i = 0; i < inventory.Count; i++)
         {
-            if (inventory[i].itemID == id)
+            if (inventory[i].itemName == name)
             {
                 inventory[i] = new Item();
                 break;
