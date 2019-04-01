@@ -29,6 +29,7 @@ public class ActionController : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        openBook.gameObject.SetActive(false);
     }
 
     // Update is called once per frame
@@ -82,26 +83,25 @@ public class ActionController : MonoBehaviour
         {
             pickupActivated = false;
             actionText.gameObject.SetActive(false);
-            openBook.gameObject.SetActive(false);
         }
     }
 
     private void PickupItem()
     {
+        GameObject child = hitinfo.transform.gameObject;
+        child.transform.parent = this.transform;
+        got = true;
+        child.GetComponent<Rigidbody>().useGravity = false;
+        child.GetComponent<BoxCollider>().isTrigger = true;
+        child.transform.localPosition = new Vector3(0, 0, 1);
+
         if (hitinfo.transform.tag == "getItem")
         {
             if (pickupActivated)
             {
                 if (hitinfo.transform != null)
                 {
-                    GameObject child = hitinfo.transform.gameObject;
                     Debug.Log("획득했습니다.");
-
-                    child.transform.parent = this.transform;
-                    got = true;
-                    child.GetComponent<Rigidbody>().useGravity = false;
-                    child.GetComponent<BoxCollider>().isTrigger = true;
-                    child.transform.localPosition = new Vector3(0, 0, 1);
                 }
             }
         }
@@ -111,29 +111,34 @@ public class ActionController : MonoBehaviour
             {
                 if (hitinfo.transform != null)
                 {
-                    GameObject child = hitinfo.transform.gameObject;
                     Debug.Log("읽고 있습니다");
 
-                    //오브젝트 완전 삭제
-                    /*Destroy(hitinfo.transform.gameObject);
-                    pickupActivated = false;
-                    actionText.gameObject.SetActive(false);*/
-
-                    //pickHere = child;
-                    //child.transform.rotation = new Quaternion(0, 0, 0, 0);
-                        
-                    child.transform.parent = this.transform;
-                    got = true;
-                    child.GetComponent<Rigidbody>().useGravity = false;
-                    child.GetComponent<BoxCollider>().isTrigger = true;
-                    child.transform.localPosition = new Vector3(0, 0, 1);
-
-                    openBook.gameObject.SetActive(true);//책 보여주기
-
+                    if (child.name == "Book1")
+                    {
+                        openBook.gameObject.SetActive(true);//책 보여주기
+                    }
                 }
             }
         }
     }
+    public void pickupItemToInventory(string name)
+    {
+        GameObject child = GameObject.Find(name);
+        child.transform.parent = this.transform;
+        got = true;
+        child.GetComponent<Rigidbody>().useGravity = false;
+        child.GetComponent<BoxCollider>().isTrigger = true;
+        child.transform.localPosition = new Vector3(0, 0, 1);
+
+        child.GetComponent<Renderer>().enabled = true;
+        //child.SetActive(true);
+
+        if (child.name == "Book1")
+        {
+            openBook.gameObject.SetActive(true);
+        }
+    }
+
     private void DropItem()
     {
         GameObject child = this.transform.GetChild(0).gameObject;
@@ -141,6 +146,21 @@ public class ActionController : MonoBehaviour
         child.GetComponent<BoxCollider>().isTrigger = false;
         child.transform.parent = null;
         got = false;
+
+        openBook.gameObject.SetActive(false);
+    }
+    public void DropItemToInventory()
+    {
+        GameObject child = this.transform.GetChild(0).gameObject;
+        child.GetComponent<Rigidbody>().useGravity = true;
+        child.GetComponent<BoxCollider>().isTrigger = false;
+        child.transform.parent = null;
+        got = false;
+        //child.transform.localPosition = new Vector3(100, 100, 100);//멀리 던지기..ㅎ..근데 못돌아옴 ㅠㅠㅠ
+
+        openBook.gameObject.SetActive(false);
+        child.GetComponent<Renderer>().enabled = false;//단점.. 없애는게 아니라 안보이는거.. hitinfo나타남..근데setActive(false)하면 find할 수가 없음..ㅠㅠㅠ..어디 멀리 던져버려야함..
+        //child.SetActive(false);
     }
 
     /*

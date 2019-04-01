@@ -29,6 +29,7 @@ public class Inventory : MonoBehaviour
     private int prevIndex; // 선택했던 아이템의 전 위치를 저장
 
     private ActionController ac;
+    private GameObject child;
 
     // Use this for initialization
     void Start()
@@ -102,7 +103,15 @@ public class Inventory : MonoBehaviour
     {
         int k = 0;
         Event e = Event.current; // 마우스 상태 공동 사용을 위한 변수로 지정
-        GameObject child = ac.transform.GetChild(0).gameObject; // 손에 든 아이템 가져오기
+
+        try
+        {
+            child = ac.transform.GetChild(0).gameObject;
+        }
+        catch
+        {
+            child = null;
+        }
 
         for (int i = 0; i < slotX; i++)
         {
@@ -116,7 +125,7 @@ public class Inventory : MonoBehaviour
                 if (slots[k].itemName != null) //슬롯에 아이템 있으면
                 {
                     GUI.DrawTexture(new Rect(i * 52 + 100, j * 52 + 30, 50, 50), slots[k].itemIcon);//아이템 그리기
-                    Debug.Log(slots[k].itemName);
+                    //Debug.Log(slots[k].itemName);
 
                     // 마우스가 해당 인벤토리 창-버튼-위로 올라온다면,
                     if (new Rect(i * 52 + 100, j * 52 + 30, 50, 50).Contains(e.mousePosition))
@@ -140,6 +149,16 @@ public class Inventory : MonoBehaviour
                             dragItem = false; // 드래그 옵션은 false로 종료하고
                             draggedItem = null; // 드래그 중인 아이템은 없는걸로 하고
                         }
+
+                        // 마우스 다운이고 손에 든 아이템이 없을 때
+                        if (e.type == EventType.mouseDown && child == null)
+                        {
+                            string name = slots[k].itemName;
+                            Debug.Log(name + " - 꺼내기 완료");
+                            RemoveItem(name, k); //오버로딩
+
+                            ac.pickupItemToInventory(name);
+                        }
                     }
                 }
                 else // 슬롯에 아이템 없고
@@ -156,13 +175,15 @@ public class Inventory : MonoBehaviour
                             dragItem = false;
                             draggedItem = null;
                         }
-                        // 마우스 다운이면서 손에 아이템이 있을 때
+
+                        // 마우스 다운이고 손에 든 아이템이 있을 때
                         if (e.type == EventType.mouseDown && child != null) 
                         {
                             string name= child.name;
-                            Debug.Log(child.name);
+                            Debug.Log(name+" - 넣기 완료");
                             AddItem(name, k); //오버로딩
-                            child.SetActive(false);
+
+                            ac.DropItemToInventory();
                         }
                     }
                 }
@@ -220,6 +241,7 @@ public class Inventory : MonoBehaviour
             }
         }
     }
+
     bool inventoryContains(string name)
     {
         for (int i = 0; i < inventory.Count; i++)
@@ -238,6 +260,13 @@ public class Inventory : MonoBehaviour
                 inventory[i] = new Item();
                 break;
             }
+        }
+    }
+    void RemoveItem(string name, int k)
+    {
+        if (inventory[k].itemName == name)
+        {
+            inventory[k] = new Item();
         }
     }
 }
