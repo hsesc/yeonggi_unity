@@ -26,9 +26,18 @@ public class ActionController : MonoBehaviour
     [SerializeField]
     private GameObject openBook;
 
+    private List<GameObject> items = new List<GameObject>();
+    private Inventory inven;
+
     // Use this for initialization
     void Start()
     {
+        inven = GameObject.Find("Inventory").GetComponent<Inventory>();
+        for (int i = 0; i < inven.slotX * inven.slotY; i++)
+        {
+            items.Add(null);
+        }
+
         openBook.gameObject.SetActive(false);
     }
 
@@ -121,22 +130,27 @@ public class ActionController : MonoBehaviour
             }
         }
     }
-    public void pickupItemToInventory(string name)
+    public void pickupItemFromInventory(int id)
     {
-        GameObject child = GameObject.Find(name);
+        GameObject child = items[id];
+        items[id] = null;
+        //GameObject child = hitinfo.transform.gameObject;
+
         child.transform.parent = this.transform;
         got = true;
         child.GetComponent<Rigidbody>().useGravity = false;
         child.GetComponent<BoxCollider>().isTrigger = true;
         child.transform.localPosition = new Vector3(0, 0, 1);
 
-        child.GetComponent<Renderer>().enabled = true;
-        //child.SetActive(true);
-
         if (child.name == "Book1")
         {
             openBook.gameObject.SetActive(true);
         }
+
+        //--------------------------------------------------
+
+        child.SetActive(true);
+        //child.GetComponent<Renderer>().enabled = true;
     }
 
     private void DropItem()
@@ -149,18 +163,35 @@ public class ActionController : MonoBehaviour
 
         openBook.gameObject.SetActive(false);
     }
-    public void DropItemToInventory()
+    public int DropItemToInventory()
     {
         GameObject child = this.transform.GetChild(0).gameObject;
         child.GetComponent<Rigidbody>().useGravity = true;
         child.GetComponent<BoxCollider>().isTrigger = false;
         child.transform.parent = null;
         got = false;
-        //child.transform.localPosition = new Vector3(100, 100, 100);//멀리 던지기..ㅎ..근데 못돌아옴 ㅠㅠㅠ
 
         openBook.gameObject.SetActive(false);
-        child.GetComponent<Renderer>().enabled = false;//단점.. 없애는게 아니라 안보이는거.. hitinfo나타남..근데setActive(false)하면 find할 수가 없음..ㅠㅠㅠ..어디 멀리 던져버려야함..
-        //child.SetActive(false);
+
+        //--------------------------------------------------
+
+        child.SetActive(false);
+
+        int i;
+        for (i = 0; i < items.Count; i++)
+        {
+            Debug.Log(i);
+            if (items[i] == null)
+            {
+                items[i] = child;
+                break;
+            }
+        }
+        return i;
+
+        //child.transform.localPosition = new Vector3(100, 100, 100);//멀리 던지기..ㅎ..근데 못돌아옴 ㅠㅠㅠ
+        //child.GetComponent<Renderer>().enabled = false;//단점.. 없애는게 아니라 안보이는거.. hitinfo나타남..근데setActive(false)하면 find할 수가 없음..ㅠㅠㅠ..어디 멀리 던져버려야함..
+        
     }
 
     /*

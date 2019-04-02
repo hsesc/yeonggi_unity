@@ -153,11 +153,12 @@ public class Inventory : MonoBehaviour
                         // 마우스 다운이고 손에 든 아이템이 없을 때
                         if (e.type == EventType.mouseDown && child == null)
                         {
+                            int id = inventory[k].itemID;
+                            ac.pickupItemFromInventory(id);
+
                             string name = slots[k].itemName;
                             Debug.Log(name + " - 꺼내기 완료");
                             RemoveItem(name, k); //오버로딩
-
-                            ac.pickupItemToInventory(name);
                         }
                     }
                 }
@@ -177,13 +178,13 @@ public class Inventory : MonoBehaviour
                         }
 
                         // 마우스 다운이고 손에 든 아이템이 있을 때
-                        if (e.type == EventType.mouseDown && child != null) 
+                        if (e.type == EventType.mouseDown && child != null)
                         {
+                            int id = ac.DropItemToInventory();
+                            
                             string name= child.name;
                             Debug.Log(name+" - 넣기 완료");
-                            AddItem(name, k); //오버로딩
-
-                            ac.DropItemToInventory();
+                            AddItem(name, k, id); //오버로딩
                         }
                     }
                 }
@@ -227,7 +228,7 @@ public class Inventory : MonoBehaviour
             }
         }
     }
-    void AddItem(string name, int k)
+    void AddItem(string name, int k, int id)
     {
         if (inventory[k].itemName == null) // 인벤토리가 빈자리면 
         {
@@ -236,6 +237,8 @@ public class Inventory : MonoBehaviour
                 if (db.items[j].itemName == name) // 디비의 아이템의 이름과 입력한 이름이 같다면,
                 {
                     inventory[k] = db.items[j]; // 빈 인벤토리에 디비에 저장된 아이템 적용
+                    inventory[k].itemID = id; // 아이디값 저장
+                    //Debug.Log(inventory[k].itemID);
                     return;
                 }
             }
