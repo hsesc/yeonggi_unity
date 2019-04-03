@@ -26,8 +26,8 @@ public class ActionController : MonoBehaviour
     [SerializeField]
     private GameObject openBook;
 
-    private List<GameObject> items = new List<GameObject>();
-    private Inventory inven;
+    private List<GameObject> items = new List<GameObject>();// 3d 아이템 저장할 리스트
+    private Inventory inven; // 인벤토리 가져오기
 
     // Use this for initialization
     void Start()
@@ -130,9 +130,9 @@ public class ActionController : MonoBehaviour
             }
         }
     }
-    public void pickupItemFromInventory(int id)
+    public void pickupItemFromInventory(int id) //Inventory.cs에서 사용
     {
-        GameObject child = items[id];
+        GameObject child = items[id]; // 아이디 == 저장위치
         items[id] = null;
         //GameObject child = hitinfo.transform.gameObject;
 
@@ -150,7 +150,6 @@ public class ActionController : MonoBehaviour
         //--------------------------------------------------
 
         child.SetActive(true);
-        //child.GetComponent<Renderer>().enabled = true;
     }
 
     private void DropItem()
@@ -163,7 +162,7 @@ public class ActionController : MonoBehaviour
 
         openBook.gameObject.SetActive(false);
     }
-    public int DropItemToInventory()
+    public int DropItemToInventory() //Inventory.cs에서 사용
     {
         GameObject child = this.transform.GetChild(0).gameObject;
         child.GetComponent<Rigidbody>().useGravity = true;
@@ -187,10 +186,13 @@ public class ActionController : MonoBehaviour
                 break;
             }
         }
-        return i;
+        return i; // 리스트 인덱스 전달해서 아이템 아이디로 사용
 
-        //child.transform.localPosition = new Vector3(100, 100, 100);//멀리 던지기..ㅎ..근데 못돌아옴 ㅠㅠㅠ
-        //child.GetComponent<Renderer>().enabled = false;//단점.. 없애는게 아니라 안보이는거.. hitinfo나타남..근데setActive(false)하면 find할 수가 없음..ㅠㅠㅠ..어디 멀리 던져버려야함..
+        //child.transform.localPosition = new Vector3(100, 100, 100);
+        //멀리 던지기..ㅎ..근데 못돌아옴 ㅠㅠㅠ
+        //child.GetComponent<Renderer>().enabled = false;
+        //단점.. 없애는게 아니라 안보이는거.. hitinfo나타남..
+        //근데setActive(false)하면 find할 수가 없음..ㅠㅠㅠ..어디 멀리 던져버려야함..
         
     }
 

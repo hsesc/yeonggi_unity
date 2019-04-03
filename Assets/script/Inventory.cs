@@ -31,6 +31,8 @@ public class Inventory : MonoBehaviour
     private ActionController ac;
     private GameObject child;
 
+    private UnityStandardAssets.Characters.FirstPerson.FirstPersonController fc;
+
     // Use this for initialization
     void Start()
     {
@@ -44,30 +46,9 @@ public class Inventory : MonoBehaviour
         // 디비 가져와서 (태그 설정과 스크립트 작성이 되어 있어야함)
         db = GameObject.FindGameObjectWithTag("Item Database").GetComponent<itemDatabase>();
 
-        //AddItem("Key1"); //아이템 Name 호출
-        //AddItem("Book1");
-
-        //RemoveItem(1001);
-
-        /*
-        // 디비에 있는 값을 인벤토리에 저장
-        for (int i = 0;i < slotX * slotY; i++)
-        {
-            if (db.items[i] != null)
-            {
-                inventory[i] = db.items[i];
-            }
-            else
-            {
-                // 디비의 아이템칸이 비어있다면 다른 행동을 하도록 유도
-            }
-        }
-        */
-        /* for(int i=0; i<n; i++) {
-         *      inventory.Add(db.items[i]);
-         * }
-         */
         ac = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<ActionController>();
+
+        fc = GameObject.Find("FPSController").GetComponent<UnityStandardAssets.Characters.FirstPerson.FirstPersonController>();
     }
 
     void Update()
@@ -75,6 +56,7 @@ public class Inventory : MonoBehaviour
         if (Input.GetButtonDown("Inventory")) // Inventory(i)버튼이 눌리면 아래 내용 실행
         {
             showInventory = !showInventory; // 누를때마다 참>거짓>참>거짓>...
+            fc.fixCamera = !fc.fixCamera; //화면 고정/움직임
         }
     }
 
@@ -141,7 +123,7 @@ public class Inventory : MonoBehaviour
                             draggedItem = slots[k]; // 현재 슬롯 아이템 저장
                             inventory[k] = new Item();
                         }
-                        // 마우스 업(클릭x) 하고 드래그 하고 있는 아이템이 있다면,
+                        // 마우스 업(놓기) 하고 드래그 하고 있는 아이템이 있다면,
                         if (e.type == EventType.mouseUp && dragItem)
                         {
                             inventory[prevIndex] = inventory[k]; // 아이템의 전 위치에 현재 아이템을 놓고
@@ -150,8 +132,8 @@ public class Inventory : MonoBehaviour
                             draggedItem = null; // 드래그 중인 아이템은 없는걸로 하고
                         }
 
-                        // 마우스 다운이고 손에 든 아이템이 없을 때
-                        if (e.type == EventType.mouseDown && child == null)
+                        // 마우스 업이고 손에 든 아이템이 없을 때
+                        if (e.type == EventType.mouseUp && child == null)
                         {
                             int id = inventory[k].itemID;
                             ac.pickupItemFromInventory(id);
@@ -159,6 +141,20 @@ public class Inventory : MonoBehaviour
                             string name = slots[k].itemName;
                             Debug.Log(name + " - 꺼내기 완료");
                             RemoveItem(name, k); //오버로딩
+                        }
+                        // 마우스 업이고 손에 든 아이템이 있을 때
+                        if (e.type == EventType.mouseUp && child != null)
+                        {
+                            int id = inventory[k].itemID;
+                            string name = slots[k].itemName;
+                            RemoveItem(name, k);
+
+                            int index = ac.DropItemToInventory();
+                            name = child.name;
+                            AddItem(name, k, index);
+
+                            ac.pickupItemFromInventory(id);
+                            Debug.Log(name + " - 아이템 스왑 완료");
                         }
                     }
                 }
@@ -177,14 +173,14 @@ public class Inventory : MonoBehaviour
                             draggedItem = null;
                         }
 
-                        // 마우스 다운이고 손에 든 아이템이 있을 때
-                        if (e.type == EventType.mouseDown && child != null)
+                        // 마우스 업이고 손에 든 아이템이 있을 때
+                        if (e.type == EventType.mouseUp && child != null)
                         {
-                            int id = ac.DropItemToInventory();
+                            int index = ac.DropItemToInventory();
                             
                             string name= child.name;
                             Debug.Log(name+" - 넣기 완료");
-                            AddItem(name, k, id); //오버로딩
+                            AddItem(name, k, index); //오버로딩
                         }
                     }
                 }
@@ -228,7 +224,7 @@ public class Inventory : MonoBehaviour
             }
         }
     }
-    void AddItem(string name, int k, int id)
+    void AddItem(string name, int k, int index)
     {
         if (inventory[k].itemName == null) // 인벤토리가 빈자리면 
         {
@@ -237,7 +233,7 @@ public class Inventory : MonoBehaviour
                 if (db.items[j].itemName == name) // 디비의 아이템의 이름과 입력한 이름이 같다면,
                 {
                     inventory[k] = db.items[j]; // 빈 인벤토리에 디비에 저장된 아이템 적용
-                    inventory[k].itemID = id; // 아이디값 저장
+                    inventory[k].itemID = index; // 아이디값 저장
                     //Debug.Log(inventory[k].itemID);
                     return;
                 }

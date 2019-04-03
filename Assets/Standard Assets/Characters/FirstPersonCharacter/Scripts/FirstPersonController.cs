@@ -42,6 +42,8 @@ namespace UnityStandardAssets.Characters.FirstPerson
         private bool m_Jumping;
         private AudioSource m_AudioSource;
 
+        public bool fixCamera;
+
         // Use this for initialization
         private void Start()
         {
@@ -55,13 +57,39 @@ namespace UnityStandardAssets.Characters.FirstPerson
             m_Jumping = false;
             m_AudioSource = GetComponent<AudioSource>();
 			m_MouseLook.Init(transform , m_Camera.transform);
+
+            fixCamera = false;
         }
 
 
         // Update is called once per frame
         private void Update()
         {
-            RotateView();
+            //고친 부분 ----------------------------------
+            if (fixCamera == false)
+            {
+                RotateView();
+                m_MouseLook.lockCursor = true;
+            }
+            else
+            {
+                m_MouseLook.lockCursor = false;
+                m_MouseLook.SetCursorLock(false);
+            }
+            /*
+             * 다른 스크립트에서 
+             * private UnityStandardAssets.Characters.FirstPerson.FirstPersonController fc;
+             * void start()
+             * {
+             *     fc = GameObject.Find("FPSController").GetComponent<UnityStandardAssets.Characters.FirstPerson.FirstPersonController>();
+             * }
+             * if()
+             * {
+             *     fc.fixCamera = !fc.fixCamera; //화면 고정/움직임
+             * }
+             * 위와 같은 식으로 사용 가능*/
+            //--------------------------------------------
+
             // the jump state needs to read here to make sure it is not missed
             if (!m_Jump)
             {
@@ -132,7 +160,6 @@ namespace UnityStandardAssets.Characters.FirstPerson
 
             m_MouseLook.UpdateCursorLock();
         }
-
 
         private void PlayJumpSound()
         {
