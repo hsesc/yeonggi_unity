@@ -124,7 +124,7 @@ public class Inventory : MonoBehaviour
                             inventory[k] = new Item();
                         }
                         // 마우스 업(놓기) 하고 드래그 하고 있는 아이템이 있다면,
-                        if (e.type == EventType.mouseUp && dragItem)
+                        else if (e.type == EventType.mouseUp && dragItem)
                         {
                             inventory[prevIndex] = inventory[k]; // 아이템의 전 위치에 현재 아이템을 놓고
                             inventory[k] = draggedItem; // 현재 아이템의 위치에 드래그하고 있는 아이템을 놓고
@@ -133,7 +133,7 @@ public class Inventory : MonoBehaviour
                         }
 
                         // 마우스 업이고 손에 든 아이템이 없을 때
-                        if (e.type == EventType.mouseUp && child == null)
+                        else if (e.type == EventType.mouseUp && child == null && !dragItem)
                         {
                             int id = inventory[k].itemID;
                             ac.pickupItemFromInventory(id);
@@ -143,7 +143,7 @@ public class Inventory : MonoBehaviour
                             RemoveItem(name, k); //오버로딩
                         }
                         // 마우스 업이고 손에 든 아이템이 있을 때
-                        if (e.type == EventType.mouseUp && child != null)
+                        else if (e.type == EventType.mouseUp && child != null && !dragItem)
                         {
                             int id = inventory[k].itemID;
                             string name = slots[k].itemName;
@@ -163,7 +163,7 @@ public class Inventory : MonoBehaviour
                     // 마우스가 해당 인벤토리 창-버튼-위로 올라온다면,
                     if (new Rect(i * 52 + 100, j * 52 + 30, 50, 50).Contains(e.mousePosition))
                     {
-                        // 마우스 업 하고 드래그 하고 있는 아이템이 없다면,
+                        // 마우스 업 하고 드래그 하고 있는 아이템이 있다면,
                         if (e.type == EventType.mouseUp && dragItem)
                         {
                             //inventory[prevIndex] = inventory[k];
@@ -174,7 +174,7 @@ public class Inventory : MonoBehaviour
                         }
 
                         // 마우스 업이고 손에 든 아이템이 있을 때
-                        if (e.type == EventType.mouseUp && child != null)
+                        else if (e.type == EventType.mouseUp && child != null && !dragItem)
                         {
                             int index = ac.DropItemToInventory();
                             
