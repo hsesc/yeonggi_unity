@@ -29,6 +29,8 @@ public class ActionController : MonoBehaviour
     private List<GameObject> items = new List<GameObject>();// 3d 아이템 저장할 리스트
     private Inventory inven; // 인벤토리 가져오기
 
+    private UnityStandardAssets.Characters.FirstPerson.FirstPersonController fc;
+
     // Use this for initialization
     void Start()
     {
@@ -54,13 +56,19 @@ public class ActionController : MonoBehaviour
         {
             if (got == false) //손에 들고 있는게 없음
             {
-                PickupItem();    //물체를 들 수 있는 함수
-                //ItemFromInventory();
+                if(hitinfo.transform.tag == "swapItem")
+                {
+                    fc = GameObject.Find("FPSController").GetComponent<UnityStandardAssets.Characters.FirstPerson.FirstPersonController>();
+                    fc.fixCamera = !fc.fixCamera;
+                }
+                else
+                {
+                    PickupItem();    //물체를 들 수 있는 함수
+                }
             }
             else //손에 들고 있는게 있음
             {
                 DropItem();
-                //ItemToInventory();
             }
         }
     }
@@ -81,6 +89,10 @@ public class ActionController : MonoBehaviour
                 else if (hitinfo.transform.tag == "readItem")
                 {
                     actionText.text = "읽어보려면" + "<color=yellow>" + "(E)" + "</color>";
+                }
+                else if (hitinfo.transform.tag == "swapItem")
+                {
+                    actionText.text = "위치설정하기/끄기" + "<color=yellow>" + "(E)" + "</color>";
                 }
             }
             else

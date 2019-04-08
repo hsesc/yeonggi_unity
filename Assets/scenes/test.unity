@@ -708,7 +708,7 @@ GameObject:
   - component: {fileID: 316910329}
   - component: {fileID: 316910328}
   - component: {fileID: 316910327}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Shelf
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1648,7 +1648,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 504611665}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.27, z: -2.25}
+  m_LocalPosition: {x: 9.13, y: 1.27, z: -0.91}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1675656855}
@@ -1855,7 +1855,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &544028233
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1863,7 +1863,7 @@ RectTransform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 544028232}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5.7700005, y: -170.9, z: 0}
+  m_LocalPosition: {x: -0.000015258789, y: -164.2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2128705424}
@@ -1871,8 +1871,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -5.77, y: -170.9}
-  m_SizeDelta: {x: 121.85, y: 30}
+  m_AnchoredPosition: {x: -0.000012398, y: -164.2}
+  m_SizeDelta: {x: 204.64, y: 16.6}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &544028234
 MonoBehaviour:
@@ -2272,9 +2272,10 @@ GameObject:
   - component: {fileID: 676616813}
   - component: {fileID: 676616812}
   - component: {fileID: 676616811}
-  m_Layer: 0
+  - component: {fileID: 676616816}
+  m_Layer: 8
   m_Name: Book3
-  m_TagString: Untagged
+  m_TagString: swapItem
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2360,6 +2361,17 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 90}
+--- !u!114 &676616816
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 676616810}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4fc70758700514e45990f35b592ee042, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &687619734
 GameObject:
   m_ObjectHideFlags: 0
@@ -2579,7 +2591,7 @@ Transform:
     type: 2}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 808321923}
-  m_LocalRotation: {x: 0.5326752, y: 0.070340455, z: 0.83613276, w: -0.110415146}
+  m_LocalRotation: {x: 0.53267515, y: 0.07034045, z: 0.83613265, w: -0.11041513}
   m_LocalPosition: {x: 0.000022271464, y: -0.00006150465, z: 0.026027026}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -3478,9 +3490,10 @@ GameObject:
   - component: {fileID: 1150859618}
   - component: {fileID: 1150859617}
   - component: {fileID: 1150859616}
-  m_Layer: 0
+  - component: {fileID: 1150859621}
+  m_Layer: 8
   m_Name: Book2
-  m_TagString: Untagged
+  m_TagString: swapItem
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3560,12 +3573,23 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1150859615}
   m_LocalRotation: {x: 0.5, y: -0.5, z: 0.5, w: 0.5}
-  m_LocalPosition: {x: 8.284, y: 1.3180001, z: 2.234}
+  m_LocalPosition: {x: 8.39, y: 1.3180001, z: 2.234}
   m_LocalScale: {x: 0.3, y: 0.1, z: 0.5}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 90}
+--- !u!114 &1150859621
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1150859615}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4fc70758700514e45990f35b592ee042, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1168996953
 GameObject:
   m_ObjectHideFlags: 0
@@ -5128,9 +5152,10 @@ GameObject:
   - component: {fileID: 1862235419}
   - component: {fileID: 1862235418}
   - component: {fileID: 1862235417}
-  m_Layer: 0
+  - component: {fileID: 1862235422}
+  m_Layer: 8
   m_Name: Book4
-  m_TagString: Untagged
+  m_TagString: swapItem
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5210,12 +5235,23 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1862235416}
   m_LocalRotation: {x: 0.5, y: -0.5, z: 0.5, w: 0.5}
-  m_LocalPosition: {x: 8.815, y: 1.318, z: 2.232}
+  m_LocalPosition: {x: 8.702, y: 1.318, z: 2.232}
   m_LocalScale: {x: 0.3, y: 0.1, z: 0.5}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 90}
+--- !u!114 &1862235422
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1862235416}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4fc70758700514e45990f35b592ee042, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1862577592
 GameObject:
   m_ObjectHideFlags: 0
@@ -5617,7 +5653,7 @@ RectTransform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2128705420}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 550.5, y: 261.5, z: 0}
+  m_LocalPosition: {x: 531.5, y: 261.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 544028233}
