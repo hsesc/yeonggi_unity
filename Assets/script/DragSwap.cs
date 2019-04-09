@@ -10,7 +10,7 @@ public class DragSwap : MonoBehaviour {
 	// Use this for initialization
     void Start()
     {
-        prePosition = transform.position;
+        
 	}
 	
 	// Update is called once per frame
@@ -18,6 +18,11 @@ public class DragSwap : MonoBehaviour {
     {
 
 	}
+
+    void OnMouseDown()
+    {
+        curPosition = transform.position;
+    }
 
     void OnMouseDrag() // 왼쪽 마우스 버튼 클릭 중이면
     {
@@ -33,7 +38,7 @@ public class DragSwap : MonoBehaviour {
 
     void OnMouseUp()
     {
-        transform.position = prePosition;
+        transform.position = curPosition;
 
         transform.GetComponent<Collider>().isTrigger = false;
         transform.GetComponent<Rigidbody>().useGravity = true;
@@ -43,9 +48,9 @@ public class DragSwap : MonoBehaviour {
     {
         if (collider.gameObject.layer == 8)
         {
-            curPosition = collider.gameObject.transform.position;
-            collider.gameObject.transform.position = prePosition;
-            prePosition = curPosition;
+            prePosition = collider.gameObject.transform.position;
+            collider.gameObject.transform.position = curPosition;
+            curPosition = prePosition;
         }
     }
 }
