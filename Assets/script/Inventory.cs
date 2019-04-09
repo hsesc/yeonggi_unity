@@ -55,8 +55,11 @@ public class Inventory : MonoBehaviour
     {
         if (Input.GetButtonDown("Inventory")) // Inventory(i)버튼이 눌리면 아래 내용 실행
         {
-            showInventory = !showInventory; // 누를때마다 참>거짓>참>거짓>...
-            fc.fixCamera = !fc.fixCamera; //화면 고정/움직임
+            if(ac.lockInventory == false)
+            {
+                showInventory = !showInventory; // 누를때마다 참>거짓>참>거짓>...
+                fc.fixCamera = !fc.fixCamera; //화면 고정/움직임
+            }
         }
     }
 

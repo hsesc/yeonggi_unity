@@ -5,7 +5,8 @@ using UnityEngine.UI;
 
 public class ActionController : MonoBehaviour
 {
-    bool got = false;   //아이템을 들고있는지 아닌지
+    private bool got = false;   //아이템을 들고있는지 아닌지
+
     [SerializeField]
     private float range;    //습득가능한 최대 거리
 
@@ -15,7 +16,7 @@ public class ActionController : MonoBehaviour
 
     //아이템 레이어에만 반응하도록 레이어마스크 설정
     [SerializeField]
-    private LayerMask layerMask1;
+    private LayerMask layerMask1; //Item
     [SerializeField]
     private LayerMask layerMask2;
 
@@ -27,15 +28,18 @@ public class ActionController : MonoBehaviour
     private GameObject openBook;
 
     private List<GameObject> items = new List<GameObject>();// 3d 아이템 저장할 리스트
-    private Inventory inven; // 인벤토리 가져오기
+    private Inventory inventory; // 인벤토리 가져오기
 
     private UnityStandardAssets.Characters.FirstPerson.FirstPersonController fc;
+    public bool lockInventory = false; // 인벤토리 잠금
 
     // Use this for initialization
     void Start()
     {
-        inven = GameObject.Find("Inventory").GetComponent<Inventory>();
-        for (int i = 0; i < inven.slotX * inven.slotY; i++)
+        fc = GameObject.Find("FPSController").GetComponent<UnityStandardAssets.Characters.FirstPerson.FirstPersonController>();
+
+        inventory = GameObject.Find("Inventory").GetComponent<Inventory>();
+        for (int i = 0; i < inventory.slotX * inventory.slotY; i++)
         {
             items.Add(null);
         }
@@ -56,19 +60,19 @@ public class ActionController : MonoBehaviour
         {
             if (got == false) //손에 들고 있는게 없음
             {
-                if(hitinfo.transform.tag == "swapItem")
+                if (hitinfo.transform.tag == "getItem" || hitinfo.transform.tag == "readItem")
                 {
-                    fc = GameObject.Find("FPSController").GetComponent<UnityStandardAssets.Characters.FirstPerson.FirstPersonController>();
-                    fc.fixCamera = !fc.fixCamera;
+                    PickupItem(); //물체를 들 수 있는 함수
                 }
                 else
                 {
-                    PickupItem();    //물체를 들 수 있는 함수
+                    lockInventory = !lockInventory;
+                    fc.fixCamera = !fc.fixCamera;
                 }
             }
             else //손에 들고 있는게 있음
             {
-                DropItem();
+                DropItem(); //물체를 떨어뜨릴 수 있는 함수
             }
         }
     }
@@ -90,9 +94,13 @@ public class ActionController : MonoBehaviour
                 {
                     actionText.text = "읽어보려면" + "<color=yellow>" + "(E)" + "</color>";
                 }
-                else if (hitinfo.transform.tag == "swapItem")
+                else if (hitinfo.transform.tag == "swapItem" && fc.fixCamera == false)
                 {
-                    actionText.text = "위치설정하기/끄기" + "<color=yellow>" + "(E)" + "</color>";
+                    actionText.text = "위치설정하려면" + "<color=yellow>" + "(E)" + "</color>";
+                }
+                else if (hitinfo.transform.tag == "swapItem" && fc.fixCamera == true)
+                {
+                    actionText.text = "위치설정끄려면" + "<color=yellow>" + "(E)" + "</color>";
                 }
             }
             else
