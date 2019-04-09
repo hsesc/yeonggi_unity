@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class DragSwap : MonoBehaviour {
-    // 콜라이더는 물체보다 약간 더 작게 설정
+    // 콜라이더 있고 리지드 바디 있는 물체에 설정
     private Vector3 prePosition;
     private Vector3 curPosition;
 

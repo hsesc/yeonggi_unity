@@ -45,4 +45,9 @@ public class GetItem : MonoBehaviour
         }
     }
 
+    private void OnCollisionExit(Collision collision)
+    {
+        getItem = null;
+    }
+
 }
