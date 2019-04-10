@@ -66,7 +66,6 @@ public class ActionController : MonoBehaviour
                 }
                 else
                 {
-                    lockInventory = !lockInventory;
                     fc.fixCamera = !fc.fixCamera;
                 }
             }
@@ -97,10 +96,12 @@ public class ActionController : MonoBehaviour
                 else if (hitinfo.transform.tag == "swapItem" && fc.fixCamera == false)
                 {
                     actionText.text = "위치설정하려면" + "<color=yellow>" + "(E)" + "</color>";
+                    lockInventory = true;
                 }
                 else if (hitinfo.transform.tag == "swapItem" && fc.fixCamera == true)
                 {
                     actionText.text = "위치설정끄려면" + "<color=yellow>" + "(E)" + "</color>";
+                    lockInventory = true;
                 }
             }
             else
@@ -112,6 +113,7 @@ public class ActionController : MonoBehaviour
         {
             pickupActivated = false;
             actionText.gameObject.SetActive(false);
+            lockInventory = false;
         }
     }
 
