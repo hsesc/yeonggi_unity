@@ -43,6 +43,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
         private AudioSource m_AudioSource;
 
         public bool fixCamera;
+        public bool lockInventory;
 
         // Use this for initialization
         private void Start()
@@ -59,7 +60,8 @@ namespace UnityStandardAssets.Characters.FirstPerson
 			m_MouseLook.Init(transform , m_Camera.transform);
 
             fixCamera = false;
-        }
+            lockInventory = false;
+    }
 
 
         // Update is called once per frame

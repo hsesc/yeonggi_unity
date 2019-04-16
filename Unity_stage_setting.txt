@@ -1,0 +1,32 @@
+UNITY - palyer collider & gravity => stage setting
+
+-물리적효과 : RigidBody Component + Collider Component + Gravity Attribute
+
+1. Player RigidBody setting 
+	Mass : 100
+	Drag : 1
+	Angular Drag : 0.05
+	Use gravity : checked
+	
+2. Boundary Condition -> Unity
+	1) player -> capsule collider
+
+3. Floor -> RigidBody component
+	Mass : 1000
+	Drag : 100
+	Angular Drag : 0
+	Use gravity : unchecked
+	is kenematie : checked
+
+4. Player -> RigidBody - constraints (freeze rotation X, Y, Z checked)
+
+5. Create Cube
+	RigidBody : X
+	Box collider : O
+	
+6. Create 4 walls & set collider size
+
+7. Floor -> increase Box collider size X, Z
+
+8. Grouping floor & walls
+	Add GameObjectEmpty, check static

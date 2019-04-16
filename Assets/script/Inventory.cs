@@ -55,7 +55,7 @@ public class Inventory : MonoBehaviour
     {
         if (Input.GetButtonDown("Inventory")) // Inventory(i)버튼이 눌리면 아래 내용 실행
         {
-            if(ac.lockInventory == false)
+            if(fc.lockInventory == false)
             {
                 showInventory = !showInventory; // 누를때마다 참>거짓>참>거짓>...
                 fc.fixCamera = !fc.fixCamera; //화면 고정/움직임
@@ -89,13 +89,9 @@ public class Inventory : MonoBehaviour
         int k = 0;
         Event e = Event.current; // 마우스 상태 공동 사용을 위한 변수로 지정
 
-        try
+        if(ac.transform.childCount > 0)
         {
             child = ac.transform.GetChild(0).gameObject;
-        }
-        catch
-        {
-            child = null;
         }
 
         for (int i = 0; i < slotX; i++)
@@ -200,7 +196,7 @@ public class Inventory : MonoBehaviour
 
     string CreateTooltip(Item item)
     {
-        tooltip = " Item name: <color=#a10000><b>" + item.itemName + "</b></color>\n Item Description: <color=#ffffff>" + item.itemDescription + "</color>";
+        tooltip = " Item name: <color=#a10000><b>" + item.itemName + "</b></color>\n Item Description:\n <color=#ffffff>" + item.itemDescription + "</color>";
         /* html 태그가 어느정도 먹힘
          * <color=#000000> 말 </color>
          * <b> 두껍게 </b>

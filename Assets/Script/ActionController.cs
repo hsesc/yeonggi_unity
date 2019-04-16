@@ -28,22 +28,14 @@ public class ActionController : MonoBehaviour
     private GameObject openBook;
 
     private List<GameObject> items = new List<GameObject>();// 3d 아이템 저장할 리스트
-    private Inventory inventory; // 인벤토리 가져오기
-
-    private UnityStandardAssets.Characters.FirstPerson.FirstPersonController fc;
-    public bool lockInventory = false; // 인벤토리 잠금
 
     // Use this for initialization
     void Start()
     {
-        fc = GameObject.Find("FPSController").GetComponent<UnityStandardAssets.Characters.FirstPerson.FirstPersonController>();
-
-        inventory = GameObject.Find("Inventory").GetComponent<Inventory>();
-        for (int i = 0; i < inventory.slotX * inventory.slotY; i++)
-        {
-            items.Add(null);
-        }
-
+        //3d 아이템들 저장
+        items.Add(GameObject.Find("Key1"));
+        items.Add(GameObject.Find("Book1"));
+        
         openBook.gameObject.SetActive(false);
     }
 
@@ -60,14 +52,7 @@ public class ActionController : MonoBehaviour
         {
             if (got == false) //손에 들고 있는게 없음
             {
-                if (hitinfo.transform.tag == "getItem" || hitinfo.transform.tag == "readItem")
-                {
-                    PickupItem(); //물체를 들 수 있는 함수
-                }
-                else
-                {
-                    fc.fixCamera = !fc.fixCamera;
-                }
+                PickupItem(); //물체를 들 수 있는 함수
             }
             else //손에 들고 있는게 있음
             {
@@ -93,16 +78,6 @@ public class ActionController : MonoBehaviour
                 {
                     actionText.text = "읽어보려면" + "<color=yellow>" + "(E)" + "</color>";
                 }
-                else if (hitinfo.transform.tag == "swapItem" && fc.fixCamera == false)
-                {
-                    actionText.text = "위치설정하려면" + "<color=yellow>" + "(E)" + "</color>";
-                    lockInventory = true;
-                }
-                else if (hitinfo.transform.tag == "swapItem" && fc.fixCamera == true)
-                {
-                    actionText.text = "위치설정끄려면" + "<color=yellow>" + "(E)" + "</color>";
-                    lockInventory = true;
-                }
             }
             else
             {
@@ -113,34 +88,30 @@ public class ActionController : MonoBehaviour
         {
             pickupActivated = false;
             actionText.gameObject.SetActive(false);
-            lockInventory = false;
         }
     }
 
     private void PickupItem()
     {
-        GameObject child = hitinfo.transform.gameObject;
-        child.transform.parent = this.transform;
-        got = true;
-        child.GetComponent<Rigidbody>().useGravity = false;
-        child.GetComponent<BoxCollider>().isTrigger = true;
-        child.transform.localPosition = new Vector3(0, 0, 1);
-
-        if (hitinfo.transform.tag == "getItem")
+        if (hitinfo.transform != null)
         {
-            if (pickupActivated)
+            GameObject child = hitinfo.transform.gameObject;
+            child.transform.parent = this.transform;
+            child.GetComponent<Rigidbody>().useGravity = false;
+            child.GetComponent<BoxCollider>().isTrigger = true;
+            child.transform.localPosition = new Vector3(0, 0, 1);
+            got = true;
+
+            if (hitinfo.transform.tag == "getItem")
             {
-                if (hitinfo.transform != null)
+                if (pickupActivated)
                 {
                     Debug.Log("획득했습니다.");
                 }
             }
-        }
-        else if (hitinfo.transform.tag == "readItem")
-        {
-            if (pickupActivated)
+            else if (hitinfo.transform.tag == "readItem")
             {
-                if (hitinfo.transform != null)
+                if (pickupActivated)
                 {
                     Debug.Log("읽고 있습니다");
 
@@ -155,23 +126,17 @@ public class ActionController : MonoBehaviour
     public void pickupItemFromInventory(int id) //Inventory.cs에서 사용
     {
         GameObject child = items[id]; // 아이디 == 저장위치
-        items[id] = null;
-        //GameObject child = hitinfo.transform.gameObject;
-
         child.transform.parent = this.transform;
-        got = true;
         child.GetComponent<Rigidbody>().useGravity = false;
         child.GetComponent<BoxCollider>().isTrigger = true;
         child.transform.localPosition = new Vector3(0, 0, 1);
+        got = true;
+        child.SetActive(true);
 
         if (child.name == "Book1")
         {
             openBook.gameObject.SetActive(true);
         }
-
-        //--------------------------------------------------
-
-        child.SetActive(true);
     }
 
     private void DropItem()
@@ -182,7 +147,10 @@ public class ActionController : MonoBehaviour
         child.transform.parent = null;
         got = false;
 
-        openBook.gameObject.SetActive(false);
+        if (child.name == "Book1")
+        {
+            openBook.gameObject.SetActive(false);
+        }
     }
     public int DropItemToInventory() //Inventory.cs에서 사용
     {
@@ -191,40 +159,22 @@ public class ActionController : MonoBehaviour
         child.GetComponent<BoxCollider>().isTrigger = false;
         child.transform.parent = null;
         got = false;
-
-        openBook.gameObject.SetActive(false);
-
-        //--------------------------------------------------
-
         child.SetActive(false);
 
+        if (child.name == "Book1")
+        {
+            openBook.gameObject.SetActive(false);
+        }
+        
         int i;
         for (i = 0; i < items.Count; i++)
         {
             Debug.Log(i);
-            if (items[i] == null)
+            if (child.name == items[i].name)
             {
-                items[i] = child;
                 break;
             }
         }
         return i; // 리스트 인덱스 전달해서 아이템 아이디로 사용
-
-        //child.transform.localPosition = new Vector3(100, 100, 100);
-        //멀리 던지기..ㅎ..근데 못돌아옴 ㅠㅠㅠ
-        //child.GetComponent<Renderer>().enabled = false;
-        //단점.. 없애는게 아니라 안보이는거.. hitinfo나타남..
-        //근데setActive(false)하면 find할 수가 없음..ㅠㅠㅠ..어디 멀리 던져버려야함..
-        
     }
-
-    /*
-     private void UseItem()
-    {
-        if (this.transform.GetChild(0).gameObject != null)
-        {
-
-        }
-        else actionText.text = "손에 아이템이 읎어요";
-    }*/
 }
