@@ -50,7 +50,7 @@ public class DragSwap : MonoBehaviour {
 
     void OnTriggerEnter(Collider collider) // 스왑하는 부분
     {
-        if (collider.gameObject.layer == 8)
+        if (collider.gameObject.layer == 9)
         {
             prePosition = collider.gameObject.transform.position;
             collider.gameObject.transform.position = curPosition;

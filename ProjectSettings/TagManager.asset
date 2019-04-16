@@ -7,7 +7,6 @@ TagManager:
   - Item Database
   - getItem
   - readItem
-  - swapItem
   layers:
   - Default
   - TransparentFX
@@ -18,7 +17,7 @@ TagManager:
   - 
   - 
   - Item
-  - 
+  - Prop
   - 
   - 
   - 
