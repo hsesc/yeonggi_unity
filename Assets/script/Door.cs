@@ -11,6 +11,7 @@ public class Door : MonoBehaviour
     private bool onTrigger;
     private Transform target;
     private GameObject child;
+    private ActionController ac;
 
     void OnTriggerStay(Collider other)
     {
@@ -36,6 +37,10 @@ public class Door : MonoBehaviour
     void OnTriggerExit(Collider other)
     {
         onTrigger = false;
+    }
+    void Start()
+    {
+        ac = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<ActionController>();
     }
 
     void Update()
@@ -69,7 +74,7 @@ public class Door : MonoBehaviour
                 getKey = false;
                 doorKey = true;
 
-                Destroy(child);
+                ac.UseItem(child);
             }
         }
         else

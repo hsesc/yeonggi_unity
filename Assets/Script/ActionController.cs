@@ -177,4 +177,10 @@ public class ActionController : MonoBehaviour
         }
         return i; // 리스트 인덱스 전달해서 아이템 아이디로 사용
     }
+
+    public void UseItem(GameObject child) //Door.cs에서 사용
+    {
+        Destroy(child);
+        got = false;
+    }
 }
