@@ -13,8 +13,9 @@ using System.Collections;
 public class Item {
     public string itemName;         // 아이템의 이름
     public int itemID;              // 아이템의 고유번호
+    public int itemValue;              // 아이템 존재 여부
     public string itemDescription;  // 아이템의 설명
-    public Texture2D itemIcon;      // 아이템의 아이콘(2D)
+    public Sprite itemImage;      // 아이템의 아이콘(2D)
     public ItemType itemType;       // 아이템의 속성 설정
     
     public enum ItemType            // 아이템의 속성 설정에 대한 갯수
@@ -28,12 +29,13 @@ public class Item {
     public Item() { }
 
     //itemDatabase.cs 에서 사용
-    public Item(string img, string name, int id, string desc, ItemType type)
+    public Item(string img, string name, int id, int val, string desc, ItemType type)
     {
         itemName = name;
         itemID = id;
+        itemValue = val;
         itemDescription = desc;
         itemType = type;
-        itemIcon = Resources.Load<Texture2D>("itemIcons/34x34icons180709_" + img);
+        itemImage = Resources.Load<Sprite>("itemImages/34x34icons180709_" + img);
     }
 }

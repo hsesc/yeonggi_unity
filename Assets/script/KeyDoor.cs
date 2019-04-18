@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Door : MonoBehaviour
+public class KeyDoor : MonoBehaviour
 {
     public string keyName;
     private bool doorKey;

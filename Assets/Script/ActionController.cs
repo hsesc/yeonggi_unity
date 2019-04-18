@@ -29,12 +29,24 @@ public class ActionController : MonoBehaviour
 
     private List<GameObject> items = new List<GameObject>();// 3d 아이템 저장할 리스트
 
+    [SerializeField]
+    private GameObject inventory; // 인벤토리 가져오기
+
+    private bool showInventory;
+    private UnityStandardAssets.Characters.FirstPerson.FirstPersonController fc;
+
     // Use this for initialization
     void Start()
     {
+        fc = GameObject.Find("FPSController").GetComponent<UnityStandardAssets.Characters.FirstPerson.FirstPersonController>();
         //3d 아이템들 저장
-        items.Add(GameObject.Find("Key1"));
-        items.Add(GameObject.Find("Book1"));
+        //items.Add(GameObject.Find("Key1"));
+        //items.Add(GameObject.Find("Book1"));
+
+        for (int i = 0; i < inventory.transform.childCount; i++)
+        {
+            items.Add(null);
+        }
         
         openBook.gameObject.SetActive(false);
     }
@@ -42,6 +54,7 @@ public class ActionController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        ShowInventory();
         TryAction();        //행동의 함수
     }
 
@@ -58,6 +71,27 @@ public class ActionController : MonoBehaviour
             {
                 DropItem(); //물체를 떨어뜨릴 수 있는 함수
             }
+        }
+    }
+
+    private void ShowInventory()
+    {
+        if (Input.GetButtonDown("Inventory")) // Inventory(i)버튼이 눌리면 아래 내용 실행
+        {
+            if (fc.lockInventory == false)
+            {
+                showInventory = !showInventory; // 누를때마다 참>거짓>참>거짓>...
+                fc.fixCamera = !fc.fixCamera; //화면 고정/움직임
+            }
+        }
+
+        if (showInventory)
+        {
+            inventory.SetActive(true);
+        }
+        else
+        {
+            inventory.SetActive(false);
         }
     }
 
@@ -126,6 +160,7 @@ public class ActionController : MonoBehaviour
     public void pickupItemFromInventory(int id) //Inventory.cs에서 사용
     {
         GameObject child = items[id]; // 아이디 == 저장위치
+        items[id] = null;
         child.transform.parent = this.transform;
         child.GetComponent<Rigidbody>().useGravity = false;
         child.GetComponent<BoxCollider>().isTrigger = true;
@@ -141,7 +176,7 @@ public class ActionController : MonoBehaviour
 
     private void DropItem()
     {
-        GameObject child = this.transform.GetChild(0).gameObject;
+        GameObject child = this.transform.GetChild(1).gameObject;
         child.GetComponent<Rigidbody>().useGravity = true;
         child.GetComponent<BoxCollider>().isTrigger = false;
         child.transform.parent = null;
@@ -154,7 +189,7 @@ public class ActionController : MonoBehaviour
     }
     public int DropItemToInventory() //Inventory.cs에서 사용
     {
-        GameObject child = this.transform.GetChild(0).gameObject;
+        GameObject child = this.transform.GetChild(1).gameObject;
         child.GetComponent<Rigidbody>().useGravity = true;
         child.GetComponent<BoxCollider>().isTrigger = false;
         child.transform.parent = null;
@@ -170,10 +205,16 @@ public class ActionController : MonoBehaviour
         for (i = 0; i < items.Count; i++)
         {
             Debug.Log(i);
+            if (items[i] == null)
+            {
+                items[i] = child;
+                break;
+            }
+            /*
             if (child.name == items[i].name)
             {
                 break;
-            }
+            }*/
         }
         return i; // 리스트 인덱스 전달해서 아이템 아이디로 사용
     }
