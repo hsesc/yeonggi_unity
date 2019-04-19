@@ -4,17 +4,38 @@ using UnityEngine;
 
 public class RefDoorOpen : MonoBehaviour {
 
-    private bool onTrigger;
     private bool refDoorOpen;
 
-    void OnTriggerEnter(Collider other)
+    private ActionController playerHand;
+
+    void OnTriggerEnter(Collider collider)
     {
-        onTrigger = true;
+        if (collider.CompareTag("Player"))
+        {
+            playerHand = GameObject.FindWithTag("MainCamera").GetComponent<ActionController>();
+            //playerHand.SetText("살펴보기 <color=yellow>(F)</color>");
+        }
     }
 
-    void OnTriggerExit(Collider other)
+    void OnTriggerStay(Collider collider)
     {
-        onTrigger = false;
+        if (collider.CompareTag("Player")) //ComparTag 가 속도면에서 gameObject.tag 보다 나은것 같다
+        {
+            if (playerHand.onTrigger == true) //F 누르면
+            {
+                //playerHand.SetText("아무것도 없다");
+                refDoorOpen = !refDoorOpen;
+            }
+        }
+    }
+
+    void OnTriggerExit(Collider collider)
+    {
+        if (collider.CompareTag("Player"))
+        {
+            //playerHand.SetText("");
+            playerHand = null;
+        }
     }
 
     // Use this for initialization
@@ -26,15 +47,6 @@ public class RefDoorOpen : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
-
-        if (onTrigger)
-        {
-            if (Input.GetKeyDown(KeyCode.F))
-            {
-                refDoorOpen = !refDoorOpen;
-            }
-        }
-
         if (refDoorOpen)
         {
             var newRot = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(0.0f, -90.0f, 0.0f), Time.deltaTime * 200);

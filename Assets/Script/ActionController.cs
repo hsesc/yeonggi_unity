@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class ActionController : MonoBehaviour
 {
+    public bool onTrigger;     //범위에 들어갔는지 아닌지
+
     private bool got = false;   //아이템을 들고있는지 아닌지
 
     [SerializeField]
@@ -22,7 +24,9 @@ public class ActionController : MonoBehaviour
 
     //필요한 컴포넌트
     [SerializeField]
-    private Text actionText;
+    private Text ItemText;
+    [SerializeField]
+    private Text propText;
 
     [SerializeField]
     private GameObject openBook;
@@ -31,14 +35,14 @@ public class ActionController : MonoBehaviour
 
     [SerializeField]
     private GameObject inventory; // 인벤토리 가져오기
-
     private bool showInventory;
-    private UnityStandardAssets.Characters.FirstPerson.FirstPersonController fc;
+
+    private UnityStandardAssets.Characters.FirstPerson.FirstPersonController player;
 
     // Use this for initialization
     void Start()
     {
-        fc = GameObject.Find("FPSController").GetComponent<UnityStandardAssets.Characters.FirstPerson.FirstPersonController>();
+        player = GameObject.FindWithTag("Player").GetComponent<UnityStandardAssets.Characters.FirstPerson.FirstPersonController>();
         //3d 아이템들 저장
         //items.Add(GameObject.Find("Key1"));
         //items.Add(GameObject.Find("Book1"));
@@ -54,8 +58,47 @@ public class ActionController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        ShowInventory();
+        Search();           //물체조사 함수
+        ShowInventory();    //인벤토리 함수
         TryAction();        //행동의 함수
+    }
+
+    private void Search()
+    {
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            onTrigger = true;
+        }
+        else
+        {
+            onTrigger = false;
+        }
+    }
+
+    public void SetText(string text)
+    {
+        propText.text = text;
+    }
+
+    private void ShowInventory()
+    {
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            if (player.lockInventory == false) // 인벤토리 잠금되어 있지 않다면
+            {
+                showInventory = !showInventory; // 누를때마다 참>거짓>참>거짓>...
+                player.fixCamera = !player.fixCamera; //화면 고정/움직임
+            }
+        }
+
+        if (showInventory)
+        {
+            inventory.SetActive(true);
+        }
+        else
+        {
+            inventory.SetActive(false);
+        }
     }
 
     private void TryAction()
@@ -74,54 +117,32 @@ public class ActionController : MonoBehaviour
         }
     }
 
-    private void ShowInventory()
-    {
-        if (Input.GetButtonDown("Inventory")) // Inventory(i)버튼이 눌리면 아래 내용 실행
-        {
-            if (fc.lockInventory == false)
-            {
-                showInventory = !showInventory; // 누를때마다 참>거짓>참>거짓>...
-                fc.fixCamera = !fc.fixCamera; //화면 고정/움직임
-            }
-        }
-
-        if (showInventory)
-        {
-            inventory.SetActive(true);
-        }
-        else
-        {
-            inventory.SetActive(false);
-        }
-    }
-
     private void CheckItem()
     {
         if (Physics.Raycast(transform.position, transform.forward,  //transform.forward = transform.TransformDirection(Vector3,forward)
                 out hitinfo, range, layerMask1)) //광선쏘기(플레이어의위치,플레이어가 바라보는 z축방향, 충돌체정보, 사정거리, 레이어마스크)
         {
             pickupActivated = true;
-            actionText.gameObject.SetActive(true);
             if (got == false)
             {
                 if (hitinfo.transform.tag == "getItem")
                 {
-                    actionText.text = "획득하려면" + "<color=yellow>" + "(E)" + "</color>";
+                    ItemText.text = "획득하려면 <color=yellow>(E)</color>";
                 }
                 else if (hitinfo.transform.tag == "readItem")
                 {
-                    actionText.text = "읽어보려면" + "<color=yellow>" + "(E)" + "</color>";
+                    ItemText.text = "읽어보려면 <color=yellow>(E)</color>";
                 }
             }
             else
             {
-                actionText.text = "";
+                ItemText.text = "";
             }
         }
         else
         {
-            pickupActivated = false;
-            actionText.gameObject.SetActive(false);
+            pickupActivated = false; 
+            ItemText.text = "";
         }
     }
 
@@ -151,12 +172,13 @@ public class ActionController : MonoBehaviour
 
                     if (child.name == "Book1")
                     {
-                        openBook.gameObject.SetActive(true);//책 보여주기
+                        openBook.gameObject.SetActive(true);
                     }
                 }
             }
         }
     }
+
     public void pickupItemFromInventory(int id) //Inventory.cs에서 사용
     {
         GameObject child = items[id]; // 아이디 == 저장위치
@@ -187,6 +209,7 @@ public class ActionController : MonoBehaviour
             openBook.gameObject.SetActive(false);
         }
     }
+
     public int DropItemToInventory() //Inventory.cs에서 사용
     {
         GameObject child = this.transform.GetChild(1).gameObject;

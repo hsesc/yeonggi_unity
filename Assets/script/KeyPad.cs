@@ -1,125 +1,126 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class KeyPad : MonoBehaviour {
-
+    
     public string password = "12345";
-    private string input;
-    private string OkInput;
-    private bool onTrigger;
-    private bool doorOpen;
-    private bool keypadScreen;
-    private UnityStandardAssets.Characters.FirstPerson.FirstPersonController fc;
 
-    void OnTriggerEnter(Collider other)
+    public GameObject keypadScreen;
+    public Text input;
+
+    private string curInput;
+    private string output;
+    private bool doorOpen;
+    private bool showKeyPadScreen;
+
+    private UnityStandardAssets.Characters.FirstPerson.FirstPersonController player;
+    private ActionController playerHand;
+
+    void OnTriggerEnter(Collider collider)
     {
-        onTrigger = true;
+        if (collider.CompareTag("Player"))
+        {
+            player = GameObject.FindWithTag("Player").GetComponent<UnityStandardAssets.Characters.FirstPerson.FirstPersonController>();
+            playerHand = GameObject.FindWithTag("MainCamera").GetComponent<ActionController>();
+            //playerHand.SetText("살펴보기 <color=yellow>(F)</color>");
+        }
     }
-    void OnTriggerExit(Collider other)
+
+    void OnTriggerStay(Collider collider)
     {
-        onTrigger = false;
-        keypadScreen = false;
-        input = "";
-        fc.fixCamera = false;
-        fc.lockInventory = false;
+        if (collider.CompareTag("Player")) //ComparTag 가 속도면에서 gameObject.tag 보다 나은것 같다
+        {
+            if (playerHand.onTrigger == true) //F 누르면
+            {
+                if (!doorOpen) //문이 잠겨있는 경우
+                {
+                    showKeyPadScreen = !showKeyPadScreen; //키패드 활성/비활성화
+                }                
+            }
+
+            if (showKeyPadScreen)
+            {
+                keypadScreen.SetActive(true);
+            }
+            else
+            {
+                keypadScreen.SetActive(false);
+            }
+
+            if (keypadScreen.activeSelf)  //키패드 활성화 되어 있으면
+            {
+                GetInput(); //키패드 값 검사
+
+                playerHand.SetText("그만두려면 <color=yellow>(F)</color>");
+                player.fixCamera = true;
+                player.lockInventory = true;
+            }
+            else //키패드 비활성화 되어 있으면
+            {
+                playerHand.SetText("");
+                player.fixCamera = false;
+                player.lockInventory = false;
+            }
+        }
+    }
+
+    void OnTriggerExit(Collider collider)
+    {
+        if (collider.CompareTag("Player"))
+        {
+            playerHand.SetText("");
+            playerHand = null;
+
+            curInput = "";
+            input.text = "";
+            keypadScreen.SetActive(false);
+
+            player.fixCamera = false;
+            player.lockInventory = false;
+        }
     }
 
     void Start()
     {
-        fc = GameObject.Find("FPSController").GetComponent<UnityStandardAssets.Characters.FirstPerson.FirstPersonController>();
+        keypadScreen.SetActive(false);
     }
 
     void Update()
     {
-        if(OkInput == password)
-        {
-            doorOpen = true;
-        }
-
         if (doorOpen)
         {
             var newRot = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(0.0f, -90.0f, 0.0f), Time.deltaTime * 250);
             transform.rotation = newRot;
-
-            fc.fixCamera = false;
-            fc.lockInventory = false;
         }
 
     }
-    void OnGUI()
+
+    private void GetInput()
     {
-        if (!doorOpen)
+        if (input.text == "OK")
         {
-            if (onTrigger)
-            {
-                GUI.Box(new Rect(0, 0, 200, 25), "Press 'F' to open keypad");
+            output = curInput;
 
-                if (Input.GetKeyDown(KeyCode.F))
-                {
-                    keypadScreen = true;
-                    onTrigger = false;
-                }
-            }
-            if (keypadScreen)
-            {
-                fc.fixCamera = true;
-                fc.lockInventory = true;
-
-                GUI.Box(new Rect(350, 50, 320, 455), "");
-                GUI.Box(new Rect(355, 55, 310, 25), input);
-
-                if (GUI.Button(new Rect(355, 85, 100, 100), "1"))
-                {
-                    input = input + "1";
-                }
-                if (GUI.Button(new Rect(460, 85, 100, 100), "2"))
-                {
-                    input = input + "2";
-                }
-                if (GUI.Button(new Rect(565, 85, 100, 100), "3"))
-                {
-                    input = input + "3";
-                }
-                if (GUI.Button(new Rect(355, 190, 100, 100), "4"))
-                {
-                    input = input + "4";
-                }
-                if (GUI.Button(new Rect(460, 190, 100, 100), "5"))
-                {
-                    input = input + "5";
-                }
-                if (GUI.Button(new Rect(565, 190, 100, 100), "6"))
-                {
-                    input = input + "6";
-                }
-                if (GUI.Button(new Rect(355, 295, 100, 100), "7"))
-                {
-                    input = input + "7";
-                }
-                if (GUI.Button(new Rect(460, 295, 100, 100), "8"))
-                {
-                    input = input + "8";
-                }
-                if (GUI.Button(new Rect(565, 295, 100, 100), "9"))
-                {
-                    input = input + "9";
-                }
-                if (GUI.Button(new Rect(460, 400, 100, 100), "0"))
-                {
-                    input = input + "0";
-                }
-                if (GUI.Button(new Rect(355, 400, 100, 100), "OK"))
-                {
-                    OkInput = input;
-                }
-                if (GUI.Button(new Rect(565, 400, 100, 100), "DEL"))
-                {
-                    input = "";
-                }
-
-            }
+            curInput = "";
+            input.text = "";
+        } 
+        else if (input.text == "DEL")
+        {
+            curInput = "";
+            input.text = "";
+        }
+        else if (curInput != input.text)
+        {
+            curInput = curInput + input.text;
+            input.text = curInput;
         }
 
+        if (output == password)
+        {
+            keypadScreen.SetActive(false);
+            doorOpen = true;
+        } 
     }
 }

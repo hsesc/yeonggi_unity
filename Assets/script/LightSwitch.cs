@@ -5,50 +5,65 @@ using UnityEngine.UI;
 
 public class LightSwitch : MonoBehaviour
 {
-    private bool onTrigger;
-    private bool active;
+    private bool lightOn;
 
-    [SerializeField]
-    private GameObject l_light;
-
-    [SerializeField]
-    private Text l_text;
+    public GameObject l_light; 
+    private ActionController playerHand;
 
     void OnTriggerEnter(Collider collider)
     {
-        onTrigger = true;
+        if (collider.CompareTag("Player"))
+        {
+            playerHand = GameObject.FindWithTag("MainCamera").GetComponent<ActionController>();
+
+            if (!l_light.activeSelf)
+            {
+                playerHand.SetText("불 키려면 <color=yellow>(F)</color>");
+            }
+            else
+            {
+                playerHand.SetText("불 끄려면 <color=yellow>(F)</color>");
+            }
+        }
     }
+
+    void OnTriggerStay(Collider collider)
+    {
+        if (collider.CompareTag("Player")) //ComparTag 가 속도면에서 gameObject.tag 보다 나은것 같다
+        {
+            if (playerHand.onTrigger == true) //F 누르면
+            {
+                lightOn = !lightOn;
+            }
+
+            if (!l_light.activeSelf)
+            {
+                playerHand.SetText("불 키려면 <color=yellow>(F)</color>");
+            }
+            else
+            {
+                playerHand.SetText("불 끄려면 <color=yellow>(F)</color>");
+            }
+        }
+    }
+
     void OnTriggerExit(Collider collider)
     {
-        onTrigger = false;
-        l_text.text = "";
+        if (collider.CompareTag("Player"))
+        {
+            playerHand.SetText("");
+            playerHand = null;
+        }
     }
 
     void Start()
     {
-        l_text.text = "";
         l_light.SetActive(false);
     }
+
     void Update()
     {
-        if (onTrigger)
-        {
-            if (!l_light.activeSelf)
-            {
-                l_text.text = "불을 키려면" + "<color=yellow>" + "(F)" + "</color>";
-            }
-            else
-            {
-                l_text.text = "불을 끄려면" + "<color=yellow>" + "(F)" + "</color>";
-            }
-
-            if (Input.GetKeyDown(KeyCode.F))
-            {
-                active = !active;
-            }
-        }
-
-        if (active)
+        if (lightOn)
         {
             l_light.SetActive(true);
         }

@@ -8,14 +8,14 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     public int number;
     public Item item;
 
-    private ActionController ac;
+    private ActionController playerHand;
     private GameObject child;
 
     private Inventory inventory;
 
     void Start()
     {
-        ac = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<ActionController>();
+        playerHand = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<ActionController>();
         inventory = GameObject.FindGameObjectWithTag("Inventory").GetComponent<Inventory>();
     }
 
@@ -24,41 +24,24 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
         if (item.itemValue > 0) //슬롯에 아이템이 있고
         {
             Debug.Log(item.itemName);
-            if (ac.transform.childCount > 1) //손에 든 아이템이 있을 때(0은 캔버스)
+            if (playerHand.transform.childCount > 1) //손에 든 아이템이 있을 때(0은 캔버스)
             {
-                child = ac.transform.GetChild(1).gameObject;
-
-                int id = item.itemID;
-                inventory.RemoveItem(item.itemName, number);
-
-                int index = ac.DropItemToInventory();
-                inventory.AddItem(child.name, number, index);
-
-                ac.pickupItemFromInventory(id);
-                Debug.Log(name + " - 아이템 스왑 완료");
-
+                SwapItem(); //아이템 꺼내기
                 inventory.ShowTooltip(item, transform.position); //툴팁 보여주기
 
             }
             else //손에 든 아이템이 없을 때
             {
-                ac.pickupItemFromInventory(item.itemID);
-                Debug.Log(item.itemName + " - 꺼내기 완료");
-                inventory.RemoveItem(item.itemName, number); //오버로딩
-
+                PopItem();
                 inventory.HideTooltip(); //툴팁 숨기기
             }
 
         }
         else //슬롯에 아이템이 없고
         {
-            if (ac.transform.childCount > 1) //손에 든 아이템이 있을 때
+            if (playerHand.transform.childCount > 1) //손에 든 아이템이 있을 때
             {
-                child = ac.transform.GetChild(1).gameObject;
-                int index = ac.DropItemToInventory();
-                Debug.Log(name + " - 넣기 완료");
-                inventory.AddItem(child.name, number, index); //오버로딩
-
+                PushItem(); // 아이템 넣기
                 inventory.ShowTooltip(item, transform.position); //툴팁 보여주기
             }
         }
@@ -68,13 +51,42 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     {
         if (item.itemValue > 0) //슬롯에 아이템이 있으면
         {
-            inventory.ShowTooltip(item, transform.position);
+            inventory.ShowTooltip(item, transform.position); //툴팁 보여주기
         }
     }
 
     public void OnPointerExit(PointerEventData data)
     {
-        inventory.HideTooltip();
+        inventory.HideTooltip(); //툴팁 숨기기
+    }
+
+    private void PushItem()
+    {
+        child = playerHand.transform.GetChild(1).gameObject;
+        int index = playerHand.DropItemToInventory();
+        inventory.AddItem(child.name, number, index);
+        Debug.Log(name + " - 넣기 완료");
+    }
+
+    private void PopItem()
+    {
+        playerHand.pickupItemFromInventory(item.itemID);
+        inventory.RemoveItem(item.itemName, number);
+        Debug.Log(item.itemName + " - 꺼내기 완료");
+    }
+
+    private void SwapItem()
+    {
+        child = playerHand.transform.GetChild(1).gameObject;
+
+        int id = item.itemID;
+        inventory.RemoveItem(item.itemName, number);
+
+        int index = playerHand.DropItemToInventory();
+        inventory.AddItem(child.name, number, index);
+
+        playerHand.pickupItemFromInventory(id);
+        Debug.Log(name + " - 아이템 스왑 완료");
     }
 
     /*

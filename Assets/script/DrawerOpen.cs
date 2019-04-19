@@ -4,18 +4,39 @@ using UnityEngine;
 
 public class DrawerOpen : MonoBehaviour
 {
-    private bool onTrigger;
-    private bool drawerOpen;
     private Vector3 initPos;
+    private bool drawerOpen;
 
-    void OnTriggerEnter(Collider other)
+    private ActionController playerHand;
+
+    void OnTriggerEnter(Collider collider)
     {
-        onTrigger = true;
+        if(collider.CompareTag("Player"))
+        {
+            playerHand = GameObject.FindWithTag("MainCamera").GetComponent<ActionController>();
+            //playerHand.SetText("살펴보기 <color=yellow>(F)</color>");
+        }
     }
 
-    void OnTriggerExit(Collider other)
+    void OnTriggerStay(Collider collider)
     {
-        onTrigger = false;
+        if (collider.CompareTag("Player")) //ComparTag 가 속도면에서 gameObject.tag 보다 나은것 같다
+        {
+            if (playerHand.onTrigger == true) //F 누르면
+            {
+                //playerHand.SetText("아무것도 없다");
+                drawerOpen = !drawerOpen;
+            }
+        }
+    }
+
+    void OnTriggerExit(Collider collider)
+    {
+        if (collider.CompareTag("Player"))
+        {
+            //playerHand.SetText("");
+            playerHand = null;
+        }
     }
 
     // Use this for initialization
@@ -25,14 +46,6 @@ public class DrawerOpen : MonoBehaviour
 	
 	// Update is called once per frame
 	void Update () {
-
-		if(onTrigger)
-        {
-            if (Input.GetKeyDown(KeyCode.F))
-            {
-                drawerOpen = !drawerOpen;
-            }
-        }
 
         if(drawerOpen)
         {

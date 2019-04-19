@@ -5,13 +5,12 @@ using UnityEngine;
 public class GetItem : MonoBehaviour
 {
     //리지드바디 없고 콜라이더 있고 이즈트리거 해제되어 있는 물체에 적용하기
-
     private GameObject getItem;
     private Vector3 curPos;
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.layer == 8)
+        if (collision.gameObject.layer == 8) //충돌한 물체가 아이템이라면 저장
         {
             getItem = collision.gameObject;
         }
@@ -30,13 +29,12 @@ public class GetItem : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    { //같이 이동
-
-        if (curPos != transform.position)
+    {
+        if (curPos != transform.position) //물체가 이동했는데
         {
-            if (getItem != null)
+            if (getItem != null) //아이템이 들어있었다면
             {
-                getItem.transform.parent = transform;
+                getItem.transform.parent = transform; //같이 움직이기
                 getItem.transform.GetComponent<BoxCollider>().isTrigger = true;
                 getItem.transform.GetComponent<Rigidbody>().useGravity = false;
             }

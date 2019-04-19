@@ -21,7 +21,7 @@ public class Inventory : MonoBehaviour
             transform.GetChild(i).GetComponent<Slot>().number = i;
         }
 
-        // 디비 가져와서 (태그 설정과 스크립트 작성이 되어 있어야함)
+        tooltip.SetActive(false);
         db = GameObject.FindGameObjectWithTag("Item Database").GetComponent<itemDatabase>();
     }
 

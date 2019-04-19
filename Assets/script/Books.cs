@@ -8,7 +8,7 @@ public class Books : MonoBehaviour
     private bool onTrigger;
     private bool bookEvent;
     private bool targetEvent;
-    private UnityStandardAssets.Characters.FirstPerson.FirstPersonController fc;
+    private UnityStandardAssets.Characters.FirstPerson.FirstPersonController player;
 
     public GameObject target;
 
@@ -21,8 +21,9 @@ public class Books : MonoBehaviour
     {
         onTrigger = false;
         bookEvent = false;
-        fc.fixCamera = false;
-        fc.lockInventory = false;
+
+        player.fixCamera = false;
+        player.lockInventory = false;
     }
 
     // Use this for initialization
@@ -34,7 +35,7 @@ public class Books : MonoBehaviour
             //Debug.Log(books[i]);
         }
 
-        fc = GameObject.Find("FPSController").GetComponent<UnityStandardAssets.Characters.FirstPerson.FirstPersonController>();
+        player = GameObject.FindWithTag("Player").GetComponent<UnityStandardAssets.Characters.FirstPerson.FirstPersonController>();
     }
 
     // Update is called once per frame
@@ -42,8 +43,8 @@ public class Books : MonoBehaviour
     {
         if (bookEvent)
         {
-            fc.fixCamera = true;
-            fc.lockInventory = true;
+            player.fixCamera = true;
+            player.lockInventory = true;
 
             for (int i = 0; i < transform.childCount; i++)
             {
@@ -70,8 +71,9 @@ public class Books : MonoBehaviour
             target.transform.position = newPos;
 
             bookEvent = false;
-            fc.fixCamera = false;
-            fc.lockInventory = false;
+
+            player.fixCamera = false;
+            player.lockInventory = false;
         }
     }
 
