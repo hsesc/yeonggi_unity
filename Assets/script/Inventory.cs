@@ -7,8 +7,6 @@ using UnityEngine.UI;
 public class Inventory : MonoBehaviour
 {
     public List<Slot> slots = new List<Slot>();
-    public Transform draggingItem;
-    public Slot enteredSlot;
     public GameObject tooltip;
 
     private itemDatabase db;
@@ -32,11 +30,11 @@ public class Inventory : MonoBehaviour
 
     }
 
-    public void ShowTooltip(Item item)
+    public void ShowTooltip(Item item, Vector3 position)
     {
         tooltip.SetActive(true);
         tooltip.transform.GetChild(0).GetComponent<Text>().text = " <color=yellow>Item name: </color><b>" + item.itemName + "</b>\n <color=yellow>Item Description:\n </color>" + item.itemDescription + "";
-        tooltip.transform.position = Input.mousePosition;
+        tooltip.transform.position = position;
     }
 
     public void HideTooltip()

@@ -2,7 +2,7 @@
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler, IDragHandler, IEndDragHandler // OnPointerEnter 메서드를 사용할 때 필요한 인터페이스.
+public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler// OnPointerEnter 메서드를 사용할 때 필요한 인터페이스.
  
 {
     public int number;
@@ -37,12 +37,16 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
                 ac.pickupItemFromInventory(id);
                 Debug.Log(name + " - 아이템 스왑 완료");
 
+                inventory.ShowTooltip(item, transform.position); //툴팁 보여주기
+
             }
             else //손에 든 아이템이 없을 때
             {
                 ac.pickupItemFromInventory(item.itemID);
                 Debug.Log(item.itemName + " - 꺼내기 완료");
                 inventory.RemoveItem(item.itemName, number); //오버로딩
+
+                inventory.HideTooltip(); //툴팁 숨기기
             }
 
         }
@@ -54,51 +58,23 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
                 int index = ac.DropItemToInventory();
                 Debug.Log(name + " - 넣기 완료");
                 inventory.AddItem(child.name, number, index); //오버로딩
+
+                inventory.ShowTooltip(item, transform.position); //툴팁 보여주기
             }
         }
     }
 
-    public void OnDrag(PointerEventData data)
-    {
-        if (transform.childCount > 0)
-        {
-            transform.GetChild(0).parent = inventory.draggingItem; //이미지의 부모를 인벤토리에
-            inventory.draggingItem.GetChild(0).position = data.position; //마우스 따라감
-        }
-
-    }
-
     public void OnPointerEnter(PointerEventData data)
     {
-        inventory.enteredSlot = this;
-
         if (item.itemValue > 0) //슬롯에 아이템이 있으면
         {
-            inventory.ShowTooltip(item);
+            inventory.ShowTooltip(item, transform.position);
         }
     }
 
     public void OnPointerExit(PointerEventData data)
     {
-        inventory.enteredSlot = null;
-
         inventory.HideTooltip();
-    }
-
-    public void OnEndDrag(PointerEventData data)
-    {
-        inventory.draggingItem.GetChild(1).parent = transform; //이미지의 부모를 다시 원래대로
-        transform.GetChild(1).localPosition = Vector3.zero; //위치도 원래대로
-
-        if (inventory.enteredSlot != null) // 아이템 스왑
-        {
-            Item tempItem = item;
-            item = inventory.enteredSlot.item;
-            inventory.enteredSlot.item = tempItem;
-
-            inventory.ItemImageChange(this);
-            inventory.ItemImageChange(inventory.enteredSlot);
-        }   
     }
 
     /*
