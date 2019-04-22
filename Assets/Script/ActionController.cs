@@ -75,7 +75,6 @@ public class ActionController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.F)) //키 누르면
         {
             onTrigger = true; //범위에 들어갔는지 아닌지 판별
-        }/*
         else
         }
         // 가끔 안먹힐 때가 있음
