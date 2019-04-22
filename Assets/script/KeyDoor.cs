@@ -24,24 +24,29 @@ public class KeyDoor : MonoBehaviour
     {
         if (collider.CompareTag("Player"))  //ComparTag 가 속도면에서 gameObject.tag 보다 나은것 같다
         {
-            if (playerHand.onTrigger == true)   //F 누르면(1번 실행)
+            if (playerHand.hitinfo2.transform == transform.GetChild(0)) // 에임이 물체에 있는 상태에서
             {
-                CheckHand();                    //알맞은 키를 가지고 있는지 검사
-                if (!doorOpen)                  //문이 닫혀있고
+                if (playerHand.onTrigger == true)   //F 누르면(1번 실행)
                 {
-                    if (handKey || getKey)      //손에 키가 있거나 / 이미 키를 내장한 경우
+                    playerHand.onTrigger = false;
+
+                    CheckHand();                    //알맞은 키를 가지고 있는지 검사
+                    if (!doorOpen)                  //문이 닫혀있고
                     {
-                        doorOpen = true;        //문 열기
-                        playerHand.SetText(""); //물체 텍스트 설정
+                        if (handKey || getKey)      //손에 키가 있거나 / 이미 키를 내장한 경우
+                        {
+                            doorOpen = true;        //문 열기
+                            playerHand.SetText(""); //물체 텍스트 설정
+                        }
+                        else //키가 아예 없는 경우
+                        {
+                            playerHand.SetText("키가 필요할 것 같다.");
+                        }
                     }
-                    else //키가 아예 없는 경우
+                    else                            //문이 열린 경우
                     {
-                        playerHand.SetText("키가 필요할 것 같다.");
+                        doorOpen = false;           //문 닫기
                     }
-                }
-                else                            //문이 열린 경우
-                {
-                    doorOpen = false;           //문 닫기
                 }
             }
         }

@@ -26,24 +26,31 @@ public class Books : MonoBehaviour
     {
         if (collider.CompareTag("Player"))      //ComparTag 가 속도면에서 gameObject.tag 보다 나은것 같다
         {
-            if (playerHand.onTrigger == true)   //F 누르면(1번 실행)
+            if (playerHand.hitinfo2.transform == transform.GetChild(0)
+                || playerHand.hitinfo2.transform == transform.GetChild(1)
+                || playerHand.hitinfo2.transform == transform.GetChild(2)) // 에임이 물체에 있는 상태에서
             {
-                if (!targetEvent)               //아직 타겟의 이벤트가 발생하지 않은 경우
+                if (playerHand.onTrigger == true)   //F 누르면(1번 실행)
                 {
-                    bookEvent = !bookEvent;     //책옮기기 이벤트 활성/비활성화 하고
-                }
+                    playerHand.onTrigger = false;
 
-                if (bookEvent) //책옮기기 이벤트 활성화 되어 있으면
-                {
-                    playerHand.SetText("그만두려면 <color=yellow>(F)</color>"); //물체 텍스트 설정
-                    player.fixCamera = true;        // 화면 멈추고 커서 나타나기
-                    player.lockInventory = true;    // 인벤토리 잠금
-                }
-                else //비활성화 되어 있으면
-                {
-                    playerHand.SetText("");
-                    player.fixCamera = false;
-                    player.lockInventory = false;
+                    if (!targetEvent)               //아직 타겟의 이벤트가 발생하지 않은 경우
+                    {
+                        bookEvent = !bookEvent;     //책옮기기 이벤트 활성/비활성화 하고
+                    }
+
+                    if (bookEvent) //책옮기기 이벤트 활성화 되어 있으면
+                    {
+                        playerHand.SetText("그만두려면 <color=yellow>(F)</color>"); //물체 텍스트 설정
+                        player.fixCamera = true;        // 화면 멈추고 커서 나타나기
+                        player.lockInventory = true;    // 인벤토리 잠금
+                    }
+                    else //비활성화 되어 있으면
+                    {
+                        playerHand.SetText("");
+                        player.fixCamera = false;
+                        player.lockInventory = false;
+                    }
                 }
             }
         }

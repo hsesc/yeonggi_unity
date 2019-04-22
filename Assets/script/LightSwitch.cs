@@ -22,18 +22,23 @@ public class LightSwitch : MonoBehaviour
     {
         if (collider.CompareTag("Player"))      //ComparTag 가 속도면에서 gameObject.tag 보다 나은것 같다
         {
-            if (playerHand.onTrigger == true)   //F 누르면(1번 실행)
+            if (playerHand.hitinfo2.transform == transform.GetChild(0)) // 에임이 물체에 있는 상태에서
             {
-                lightOn = !lightOn;             //불빛 활성화/비활성화
-            }
+                if (lightOn) //불빛 활성화되어 있으면
+                {
+                    playerHand.SetText("불 끄려면 <color=yellow>(F)</color>"); //물체 텍스트 설정
+                }
+                else//비활성화 되어 있으면
+                {
+                    playerHand.SetText("불 키려면 <color=yellow>(F)</color>");
+                }
 
-            if (lightOn) //불빛 활성화되어 있으면
-            {
-                playerHand.SetText("불 끄려면 <color=yellow>(F)</color>"); //물체 텍스트 설정
-            }
-            else//비활성화 되어 있으면
-            {
-                playerHand.SetText("불 키려면 <color=yellow>(F)</color>");
+                if (playerHand.onTrigger == true)   //F 누르면(1번 실행)
+                {
+                    playerHand.onTrigger = false;
+
+                    lightOn = !lightOn;             //불빛 활성화/비활성화
+                }
             }
         }
     }

@@ -21,10 +21,15 @@ public class RefDoorOpen : MonoBehaviour {
     {
         if (collider.CompareTag("Player"))      //ComparTag 가 속도면에서 gameObject.tag 보다 나은것 같다
         {
-            if (playerHand.onTrigger == true)   //F 누르면(1번 실행)
+            if (playerHand.hitinfo2.transform == transform.GetChild(0)) // 에임이 물체에 있는 상태에서
             {
-                //playerHand.SetText("아무것도 없다");
-                refDoorOpen = !refDoorOpen;     //냉장고 열기 활성화/비활성화
+                if (playerHand.onTrigger == true)   //F 누르면(1번 실행)
+                {
+                    playerHand.onTrigger = false;
+
+                    //playerHand.SetText("아무것도 없다");
+                    refDoorOpen = !refDoorOpen;     //냉장고 열기 활성화/비활성화
+                }
             }
         }
     }

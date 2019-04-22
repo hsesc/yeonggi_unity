@@ -31,24 +31,29 @@ public class KeyPad : MonoBehaviour {
     {
         if (collider.CompareTag("Player"))                  //ComparTag 가 속도면에서 gameObject.tag 보다 나은것 같다
         {
-            if (playerHand.onTrigger == true)               //F 누르면(1번 실행)
+            if (playerHand.hitinfo2.transform == transform.GetChild(0)) // 에임이 물체에 있는 상태에서
             {
-                if (!doorOpen)                              //문이 잠겨있는 경우
+                if (playerHand.onTrigger == true)   //F 누르면(1번 실행)
                 {
-                    showKeypadScreen = !showKeypadScreen;   //키패드 활성/비활성화 하고
-                }
+                    playerHand.onTrigger = false;
 
-                if (showKeypadScreen)  //키패드 활성화 되어 있으면
-                {
-                    playerHand.SetText("그만두려면 <color=yellow>(F)</color>"); //물체 텍스트 설정
-                    player.fixCamera = true;        // 화면 멈추고 커서 나타나기
-                    player.lockInventory = true;    // 인벤토리 잠금
-                }
-                else //비활성화 되어 있으면
-                {
-                    playerHand.SetText("");
-                    player.fixCamera = false;
-                    player.lockInventory = false;
+                    if (!doorOpen)                              //문이 잠겨있는 경우
+                    {
+                        showKeypadScreen = !showKeypadScreen;   //키패드 활성/비활성화 하고
+                    }
+
+                    if (showKeypadScreen)  //키패드 활성화 되어 있으면
+                    {
+                        playerHand.SetText("그만두려면 <color=yellow>(F)</color>"); //물체 텍스트 설정
+                        player.fixCamera = true;        // 화면 멈추고 커서 나타나기
+                        player.lockInventory = true;    // 인벤토리 잠금
+                    }
+                    else //비활성화 되어 있으면
+                    {
+                        playerHand.SetText("");
+                        player.fixCamera = false;
+                        player.lockInventory = false;
+                    }
                 }
             }
         }
