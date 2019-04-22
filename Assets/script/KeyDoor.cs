@@ -28,8 +28,6 @@ public class KeyDoor : MonoBehaviour
             {
                 if (playerHand.onTrigger == true)   //F 누르면(1번 실행)
                 {
-                    playerHand.onTrigger = false;
-
                     CheckHand();                    //알맞은 키를 가지고 있는지 검사
                     if (!doorOpen)                  //문이 닫혀있고
                     {

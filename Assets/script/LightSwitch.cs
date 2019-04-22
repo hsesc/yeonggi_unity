@@ -35,8 +35,6 @@ public class LightSwitch : MonoBehaviour
 
                 if (playerHand.onTrigger == true)   //F 누르면(1번 실행)
                 {
-                    playerHand.onTrigger = false;
-
                     lightOn = !lightOn;             //불빛 활성화/비활성화
                 }
             }

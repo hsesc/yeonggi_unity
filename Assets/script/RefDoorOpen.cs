@@ -25,8 +25,6 @@ public class RefDoorOpen : MonoBehaviour {
             {
                 if (playerHand.onTrigger == true)   //F 누르면(1번 실행)
                 {
-                    playerHand.onTrigger = false;
-
                     //playerHand.SetText("아무것도 없다");
                     refDoorOpen = !refDoorOpen;     //냉장고 열기 활성화/비활성화
                 }

@@ -77,9 +77,13 @@ public class ActionController : MonoBehaviour
             onTrigger = true; //범위에 들어갔는지 아닌지 판별
         }/*
         else
+        }
+        // 가끔 안먹힐 때가 있음
+        // true -> 다른 스크립트 진행 -> false 되어야하는데 true -> false -> 다른 스크립트 진행.. 이렇게 되는 것 같다..
+        else 
         {
             onTrigger = false;
-        }*/
+        }
     }
 
     public void SetText(string text) // 물체 텍스트 설정

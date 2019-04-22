@@ -35,8 +35,6 @@ public class KeyPad : MonoBehaviour {
             {
                 if (playerHand.onTrigger == true)   //F 누르면(1번 실행)
                 {
-                    playerHand.onTrigger = false;
-
                     if (!doorOpen)                              //문이 잠겨있는 경우
                     {
                         showKeypadScreen = !showKeypadScreen;   //키패드 활성/비활성화 하고

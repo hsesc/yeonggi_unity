@@ -32,8 +32,6 @@ public class Books : MonoBehaviour
             {
                 if (playerHand.onTrigger == true)   //F 누르면(1번 실행)
                 {
-                    playerHand.onTrigger = false;
-
                     if (!targetEvent)               //아직 타겟의 이벤트가 발생하지 않은 경우
                     {
                         bookEvent = !bookEvent;     //책옮기기 이벤트 활성/비활성화 하고

@@ -26,8 +26,6 @@ public class DrawerOpen : MonoBehaviour
             {
                 if (playerHand.onTrigger == true)   //F 누르면(1번 실행)
                 {
-                    playerHand.onTrigger = false;
-
                     //playerHand.SetText("아무것도 없다");
                     drawerOpen = !drawerOpen;       //서랍 열리기 활성화/비활성화
                 }
