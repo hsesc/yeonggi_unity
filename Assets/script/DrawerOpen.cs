@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class DrawerOpen : MonoBehaviour
 {
-    private Vector3 initPos;
-    private bool drawerOpen;
+    private Vector3 initPos;    //원래 위치
+    private bool drawerOpen;    //서랍이 열렸는지 아닌지
 
     private ActionController playerHand;
 
@@ -20,12 +20,12 @@ public class DrawerOpen : MonoBehaviour
 
     void OnTriggerStay(Collider collider)
     {
-        if (collider.CompareTag("Player")) //ComparTag 가 속도면에서 gameObject.tag 보다 나은것 같다
+        if (collider.CompareTag("Player"))      //ComparTag 가 속도면에서 gameObject.tag 보다 나은것 같다
         {
-            if (playerHand.onTrigger == true) //F 누르면
+            if (playerHand.onTrigger == true)   //F 누르면(1번 실행)
             {
                 //playerHand.SetText("아무것도 없다");
-                drawerOpen = !drawerOpen;
+                drawerOpen = !drawerOpen;       //서랍 열리기 활성화/비활성화
             }
         }
     }
@@ -47,17 +47,17 @@ public class DrawerOpen : MonoBehaviour
 	// Update is called once per frame
 	void Update () {
 
-        if(drawerOpen)
+        if(drawerOpen) //서랍 열리면
         {
             var newPos = Vector3.MoveTowards
                 (transform.position, new Vector3(initPos.x, initPos.y, initPos.z - 0.5f), 0.05f);
-            transform.position = newPos;
+            transform.position = newPos; //원래 위치에서 z 방향으로 약간 이동
         }
-        else
+        else// 닫히면
         {
             var newPos = Vector3.MoveTowards
                 (transform.position, new Vector3(initPos.x, initPos.y, initPos.z), 0.05f);
-            transform.position = newPos;
+            transform.position = newPos; //원래 위치로
         }
 	}
 }

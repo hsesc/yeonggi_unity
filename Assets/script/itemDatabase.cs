@@ -13,6 +13,7 @@ public class itemDatabase : MonoBehaviour
         items.Add(new Item("16_7", "Key1", 1001, 1, "This is key for door", Item.ItemType.Key));
         items.Add(new Item("16_8", "Key2", 1002, 1, "This is key for door", Item.ItemType.Key));
         items.Add(new Item("29_4", "Book1", 1003, 1, "This book is can read", Item.ItemType.Clue));
+        items.Add(new Item("24_7", "Flash", 1004, 1, "spot light", Item.ItemType.Use));
         // 원하는 만큼 만들어주기(나중에 디비가 생긴다면 이거 안해도 되는데, 디비 없이 할거면 해야함..!)
     }
 }

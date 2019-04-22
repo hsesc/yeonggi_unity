@@ -5,9 +5,9 @@ using UnityEngine.UI;
 
 public class LightSwitch : MonoBehaviour
 {
-    private bool lightOn;
+    public GameObject l_light;              //불빛
 
-    public GameObject l_light; 
+    private bool lightOn;                   //불이 켜졌는지 아닌지
     private ActionController playerHand;
 
     void OnTriggerEnter(Collider collider)
@@ -15,34 +15,25 @@ public class LightSwitch : MonoBehaviour
         if (collider.CompareTag("Player"))
         {
             playerHand = GameObject.FindWithTag("MainCamera").GetComponent<ActionController>();
-
-            if (!l_light.activeSelf)
-            {
-                playerHand.SetText("불 키려면 <color=yellow>(F)</color>");
-            }
-            else
-            {
-                playerHand.SetText("불 끄려면 <color=yellow>(F)</color>");
-            }
         }
     }
 
     void OnTriggerStay(Collider collider)
     {
-        if (collider.CompareTag("Player")) //ComparTag 가 속도면에서 gameObject.tag 보다 나은것 같다
+        if (collider.CompareTag("Player"))      //ComparTag 가 속도면에서 gameObject.tag 보다 나은것 같다
         {
-            if (playerHand.onTrigger == true) //F 누르면
+            if (playerHand.onTrigger == true)   //F 누르면(1번 실행)
             {
-                lightOn = !lightOn;
+                lightOn = !lightOn;             //불빛 활성화/비활성화
             }
 
-            if (!l_light.activeSelf)
+            if (lightOn) //불빛 활성화되어 있으면
+            {
+                playerHand.SetText("불 끄려면 <color=yellow>(F)</color>"); //물체 텍스트 설정
+            }
+            else//비활성화 되어 있으면
             {
                 playerHand.SetText("불 키려면 <color=yellow>(F)</color>");
-            }
-            else
-            {
-                playerHand.SetText("불 끄려면 <color=yellow>(F)</color>");
             }
         }
     }

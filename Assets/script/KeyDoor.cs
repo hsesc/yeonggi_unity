@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class KeyDoor : MonoBehaviour
 {
-    public string keyName;
-    private bool getKey;
-    private bool handKey;
-    private bool doorOpen;
+    public string keyName;  //문에 알맞은 키 이름 받기
+    private bool getKey;    //내장된 키
+    private bool handKey;   //손에 들고 있는 키
+    private bool doorOpen;  //문이 열렸는지 아닌지
 
     private GameObject child;
     private ActionController playerHand;
@@ -17,41 +17,31 @@ public class KeyDoor : MonoBehaviour
         if (collider.CompareTag("Player"))
         {
             playerHand = GameObject.FindWithTag("MainCamera").GetComponent<ActionController>();
-
-            CheckKey(); //알맞은 키 검사
-
-            if (!doorOpen)
-            {
-                if (!handKey && !getKey) //손에 키가 없고 내장된 키도 없을 경우
-                {
-                    playerHand.SetText("키가 필요할 것 같다.");
-                }
-                else
-                {
-                    playerHand.SetText("");
-                }
-            }
         }
     }
 
     void OnTriggerStay(Collider collider)
     {
-        if (collider.CompareTag("Player")) //ComparTag 가 속도면에서 gameObject.tag 보다 나은것 같다
+        if (collider.CompareTag("Player"))  //ComparTag 가 속도면에서 gameObject.tag 보다 나은것 같다
         {
-            CheckKey(); //알맞은 키 검사
-
-            if (playerHand.onTrigger == true) //F 누르면
+            if (playerHand.onTrigger == true)   //F 누르면(1번 실행)
             {
-                if (!doorOpen)
+                CheckHand();                    //알맞은 키를 가지고 있는지 검사
+                if (!doorOpen)                  //문이 닫혀있고
                 {
-                    if (handKey || getKey) //손에 키가 있거나 / 이미 키를 내장한 경우
+                    if (handKey || getKey)      //손에 키가 있거나 / 이미 키를 내장한 경우
                     {
-                        doorOpen = true;
+                        doorOpen = true;        //문 열기
+                        playerHand.SetText(""); //물체 텍스트 설정
+                    }
+                    else //키가 아예 없는 경우
+                    {
+                        playerHand.SetText("키가 필요할 것 같다.");
                     }
                 }
-                else
+                else                            //문이 열린 경우
                 {
-                    doorOpen = false;
+                    doorOpen = false;           //문 닫기
                 }
             }
         }
@@ -84,30 +74,30 @@ public class KeyDoor : MonoBehaviour
             var newRot = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(0.0f, -90.0f, 0.0f), Time.deltaTime * 200);
             transform.rotation = newRot;
 
-            RemoveKey();
+            RemoveKey(); //키 삭제
             
         }
     }
 
-    private void CheckKey()
+    private void CheckHand()
     {
-        if (playerHand.transform.childCount > 1)
+        if (playerHand.transform.childCount > 1) // 손에 들고 있는게 있고
         {
-            child = playerHand.transform.GetChild(1).gameObject;
-            if (child.name == keyName)
+            child = playerHand.transform.GetChild(1).gameObject; //들고 있는게 
+            if (child.name == keyName) //문의 키와 이름이 같은 경우
             {
-                handKey = true;
+                handKey = true; //손에 키가 있음
             }
         }
-        else
+        else //손에 들고 있는게 없으면
         {
-            handKey = false;
+            handKey = false; //손에 키가 없음
         }
     }
 
     private void RemoveKey()
     {
-        if (handKey) //손에 키가 있는경우
+        if (handKey) //손에 키가 있는 경우
         {
             handKey = false;    //손에 있는 키 비활성화
             getKey = true;      //내장 키 활성화

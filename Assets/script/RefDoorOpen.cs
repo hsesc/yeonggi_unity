@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class RefDoorOpen : MonoBehaviour {
 
-    private bool refDoorOpen;
+    private bool refDoorOpen; //냉장고 열렸는지 아닌지
 
     private ActionController playerHand;
 
@@ -19,12 +19,12 @@ public class RefDoorOpen : MonoBehaviour {
 
     void OnTriggerStay(Collider collider)
     {
-        if (collider.CompareTag("Player")) //ComparTag 가 속도면에서 gameObject.tag 보다 나은것 같다
+        if (collider.CompareTag("Player"))      //ComparTag 가 속도면에서 gameObject.tag 보다 나은것 같다
         {
-            if (playerHand.onTrigger == true) //F 누르면
+            if (playerHand.onTrigger == true)   //F 누르면(1번 실행)
             {
                 //playerHand.SetText("아무것도 없다");
-                refDoorOpen = !refDoorOpen;
+                refDoorOpen = !refDoorOpen;     //냉장고 열기 활성화/비활성화
             }
         }
     }

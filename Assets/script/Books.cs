@@ -4,54 +4,88 @@ using UnityEngine;
 
 public class Books : MonoBehaviour
 {
-    private List<GameObject> books = new List<GameObject>();
-    private bool onTrigger;
-    private bool bookEvent;
-    private bool targetEvent;
+    public GameObject target;   // 이벤트를 실행할 타겟
+
+    private List<GameObject> books = new List<GameObject>(); //DragSwap(옮기기) 스크립트를 적용할 책들 리스트
+    private bool bookEvent;     //책 옮기기 이벤트가 발생했는지 아닌지
+    private bool targetEvent;   //타겟 이벤트가 발생했는지 아닌지
+
     private UnityStandardAssets.Characters.FirstPerson.FirstPersonController player;
+    private ActionController playerHand;
 
-    public GameObject target;
-
-    void OnTriggerEnter(Collider other)
+    void OnTriggerEnter(Collider collider)
     {
-        //Debug.Log(other.name);
-        onTrigger = true;
+        if (collider.CompareTag("Player"))
+        {
+            player = GameObject.FindWithTag("Player").GetComponent<UnityStandardAssets.Characters.FirstPerson.FirstPersonController>();
+            playerHand = GameObject.FindWithTag("MainCamera").GetComponent<ActionController>();
+        }
     }
-    void OnTriggerExit(Collider other)
-    {
-        onTrigger = false;
-        bookEvent = false;
 
-        player.fixCamera = false;
-        player.lockInventory = false;
+    void OnTriggerStay(Collider collider)
+    {
+        if (collider.CompareTag("Player"))      //ComparTag 가 속도면에서 gameObject.tag 보다 나은것 같다
+        {
+            if (playerHand.onTrigger == true)   //F 누르면(1번 실행)
+            {
+                if (!targetEvent)               //아직 타겟의 이벤트가 발생하지 않은 경우
+                {
+                    bookEvent = !bookEvent;     //책옮기기 이벤트 활성/비활성화 하고
+                }
+
+                if (bookEvent) //책옮기기 이벤트 활성화 되어 있으면
+                {
+                    playerHand.SetText("그만두려면 <color=yellow>(F)</color>"); //물체 텍스트 설정
+                    player.fixCamera = true;        // 화면 멈추고 커서 나타나기
+                    player.lockInventory = true;    // 인벤토리 잠금
+                }
+                else //비활성화 되어 있으면
+                {
+                    playerHand.SetText("");
+                    player.fixCamera = false;
+                    player.lockInventory = false;
+                }
+            }
+        }
+    }
+
+    void OnTriggerExit(Collider collider)
+    {
+        if (collider.CompareTag("Player"))
+        {
+            playerHand.SetText("");
+            playerHand = null;
+
+            player.fixCamera = false;
+            player.lockInventory = false;
+            player = null;
+
+            bookEvent = false;
+        }
     }
 
     // Use this for initialization
     void Start()
     {
-        for (int i = 0; i < transform.childCount; i++)
+        for (int i = 0; i < transform.childCount; i++)      //자식으로 있는 책들
         {
-            books.Add(transform.GetChild(i).gameObject);
+            books.Add(transform.GetChild(i).gameObject);    //리스트에 전부 추가
             //Debug.Log(books[i]);
         }
-
-        player = GameObject.FindWithTag("Player").GetComponent<UnityStandardAssets.Characters.FirstPerson.FirstPersonController>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (bookEvent)
+        if (bookEvent) //책 옮기기 이벤트 활성화인 경우
         {
-            player.fixCamera = true;
-            player.lockInventory = true;
-
             for (int i = 0; i < transform.childCount; i++)
             {
-                books[i].GetComponent<DragSwap>().active = true;
+                books[i].GetComponent<DragSwap>().active = true; // 옮기기 스크립트 활성화
             }
+            CompareBooks(); // 책 위치 비교
         }
-        else
+        else //비활성화일 경우
         {
             for (int i = 0; i < transform.childCount; i++)
             {
@@ -59,38 +93,25 @@ public class Books : MonoBehaviour
             }
         }
 
-        if (books[0].transform.position.x > books[1].transform.position.x
-                 && books[1].transform.position.x > books[2].transform.position.x)
-        {
-            targetEvent = true;
-        }
-
-        if (targetEvent)
+        if (targetEvent) //타겟 이벤트 활성화인 경우
         {
             var newPos = Vector3.MoveTowards(target.transform.position, new Vector3(8, 0, 8), 0.5f);
-            target.transform.position = newPos;
-
-            bookEvent = false;
-
-            player.fixCamera = false;
-            player.lockInventory = false;
+            target.transform.position = newPos; //타겟의 위치 변경
         }
     }
 
-    void OnGUI()
+    private void CompareBooks()
     {
-        if (!targetEvent)
+        if (books[0].transform.position.x > books[1].transform.position.x
+                 && books[1].transform.position.x > books[2].transform.position.x) //위치가 다음과 같을 시
         {
-            if (onTrigger)
-            {
-                GUI.Box(new Rect(0, 0, 200, 25), "Press 'F' to moving books");
+            bookEvent = false;              //책 옮기기 이벤트 비활성화하고
+            //(CompareBooks 함수의 상위 식을 비활성화 하므로 아래 식들은 1번만 실행됨)
+            targetEvent = true;             //타겟 이벤트 활성화하고
 
-                if (Input.GetKeyDown(KeyCode.F))
-                {
-                    onTrigger = false;
-                    bookEvent = true;
-                }
-            }
+            playerHand.SetText("");
+            player.fixCamera = false;       //화면 움직이고
+            player.lockInventory = false;   //인벤토리 잠금 풀기
         }
     }
 }
