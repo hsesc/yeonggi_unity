@@ -49,6 +49,10 @@ public class KeyDoor : MonoBehaviour
                     }
                 }
             }
+            else
+            {
+                playerHand.SetText("");
+            }
         }
     }
 

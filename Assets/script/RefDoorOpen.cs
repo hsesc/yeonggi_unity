@@ -31,6 +31,10 @@ public class RefDoorOpen : MonoBehaviour {
                     refDoorOpen = !refDoorOpen;     //냉장고 열기 활성화/비활성화
                 }
             }
+            else
+            {
+                //playerHand.SetText("");
+            }
         }
     }
 

@@ -56,6 +56,10 @@ public class KeyPad : MonoBehaviour {
                     }
                 }
             }
+            else
+            {
+                playerHand.SetText("");
+            }
         }
     }
 

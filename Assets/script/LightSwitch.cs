@@ -40,6 +40,10 @@ public class LightSwitch : MonoBehaviour
                     lightOn = !lightOn;             //불빛 활성화/비활성화
                 }
             }
+            else
+            {
+                playerHand.SetText("");
+            }
         }
     }
 

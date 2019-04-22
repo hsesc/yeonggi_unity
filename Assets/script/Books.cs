@@ -53,6 +53,10 @@ public class Books : MonoBehaviour
                     }
                 }
             }
+            else
+            {
+                playerHand.SetText("");
+            }
         }
     }
 

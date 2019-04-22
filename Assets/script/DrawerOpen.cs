@@ -32,6 +32,10 @@ public class DrawerOpen : MonoBehaviour
                     drawerOpen = !drawerOpen;       //서랍 열리기 활성화/비활성화
                 }
             }
+            else
+            {
+                //playerHand.SetText("");
+            }
         }
     }
 

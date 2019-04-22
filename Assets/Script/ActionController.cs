@@ -69,12 +69,12 @@ public class ActionController : MonoBehaviour
 
     private void Search()
     {
+        //동시에 여러 물체 상호작용을 막기위해 레이캐스트 사용
+        Physics.Raycast(transform.position, transform.forward, out hitinfo2, range, layerMask2); 
+
         if (Input.GetKeyDown(KeyCode.F)) //키 누르면
         {
             onTrigger = true; //범위에 들어갔는지 아닌지 판별
-
-            //동시에 여러 물체 상호작용을 막기위해 레이캐스트 사용
-            Physics.Raycast(transform.position, transform.forward, out hitinfo2, range, layerMask2); 
         }/*
         else
         {
