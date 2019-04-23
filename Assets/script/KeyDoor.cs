@@ -9,6 +9,7 @@ public class KeyDoor : MonoBehaviour
     private bool handKey;   //손에 들고 있는 키
     private bool doorOpen;  //문이 열렸는지 아닌지
 
+    private bool onTrigger; //범위에 들어가서 에임을 맞추었는지 아닌지
     private GameObject child;
     private ActionController playerHand;
 
@@ -26,26 +27,12 @@ public class KeyDoor : MonoBehaviour
         {
             if (playerHand.hitinfo2.transform == transform.GetChild(0)) // 에임이 물체에 있는 상태에서
             {
-                if (playerHand.onTrigger == true)   //F 누르면(1번 실행)
+                if (Input.GetKeyDown(KeyCode.F)) //키 누르면
                 {
-                    CheckHand();                    //알맞은 키를 가지고 있는지 검사
-                    if (!doorOpen)                  //문이 닫혀있고
-                    {
-                        if (handKey || getKey)      //손에 키가 있거나 / 이미 키를 내장한 경우
-                        {
-                            doorOpen = true;        //문 열기
-                            playerHand.SetText(""); //물체 텍스트 설정
-                        }
-                        else //키가 아예 없는 경우
-                        {
-                            playerHand.SetText("키가 필요할 것 같다.");
-                        }
-                    }
-                    else                            //문이 열린 경우
-                    {
-                        doorOpen = false;           //문 닫기
-                    }
+                    onTrigger = true; //범위에 들어갔는지 아닌지 판별
                 }
+
+                TryEvent();
             }
             else
             {
@@ -83,6 +70,32 @@ public class KeyDoor : MonoBehaviour
 
             RemoveKey(); //키 삭제
             
+        }
+    }
+
+    private void TryEvent()
+    {
+        if (onTrigger == true)   //F 누르면(1번 실행)
+        {
+            onTrigger = false;
+
+            CheckHand();                    //알맞은 키를 가지고 있는지 검사
+            if (!doorOpen)                  //문이 닫혀있고
+            {
+                if (handKey || getKey)      //손에 키가 있거나 / 이미 키를 내장한 경우
+                {
+                    doorOpen = true;        //문 열기
+                    playerHand.SetText(""); //물체 텍스트 설정
+                }
+                else //키가 아예 없는 경우
+                {
+                    playerHand.SetText("키가 필요할 것 같다.");
+                }
+            }
+            else                            //문이 열린 경우
+            {
+                doorOpen = false;           //문 닫기
+            }
         }
     }
 

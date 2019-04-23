@@ -7,6 +7,7 @@ public class DrawerOpen : MonoBehaviour
     private Vector3 initPos;    //원래 위치
     private bool drawerOpen;    //서랍이 열렸는지 아닌지
 
+    private bool onTrigger; //범위에 들어가서 에임을 맞추었는지 아닌지
     private ActionController playerHand;
 
     void OnTriggerEnter(Collider collider)
@@ -24,11 +25,12 @@ public class DrawerOpen : MonoBehaviour
         {
             if (playerHand.hitinfo2.transform == transform.GetChild(0)) // 에임이 물체에 있는 상태에서
             {
-                if (playerHand.onTrigger == true)   //F 누르면(1번 실행)
+                if (Input.GetKeyDown(KeyCode.F)) //키 누르면
                 {
-                    //playerHand.SetText("아무것도 없다");
-                    drawerOpen = !drawerOpen;       //서랍 열리기 활성화/비활성화
+                    onTrigger = true; //범위에 들어갔는지 아닌지 판별
                 }
+
+                TryEvent();
             }
             else
             {
@@ -67,4 +69,15 @@ public class DrawerOpen : MonoBehaviour
             transform.position = newPos; //원래 위치로
         }
 	}
+
+    private void TryEvent()
+    {
+        if (onTrigger == true)  //F 누르면(1번 실행)
+        {
+            onTrigger = false;
+
+            //playerHand.SetText("아무것도 없다");
+            drawerOpen = !drawerOpen;       //서랍 열리기 활성화/비활성화
+        }
+    }
 }

@@ -15,6 +15,7 @@ public class KeyPad : MonoBehaviour {
     private bool doorOpen;              //문이 열렸는지 아닌지
     private bool showKeypadScreen;      //키패드 보이게 할 것인지 아닌지
 
+    private bool onTrigger; //범위에 들어가서 에임을 맞추었는지 아닌지
     private UnityStandardAssets.Characters.FirstPerson.FirstPersonController player;
     private ActionController playerHand;
 
@@ -33,26 +34,12 @@ public class KeyPad : MonoBehaviour {
         {
             if (playerHand.hitinfo2.transform == transform.GetChild(0)) // 에임이 물체에 있는 상태에서
             {
-                if (playerHand.onTrigger == true)   //F 누르면(1번 실행)
+                if (Input.GetKeyDown(KeyCode.F)) //키 누르면
                 {
-                    if (!doorOpen)                              //문이 잠겨있는 경우
-                    {
-                        showKeypadScreen = !showKeypadScreen;   //키패드 활성/비활성화 하고
-                    }
-
-                    if (showKeypadScreen)  //키패드 활성화 되어 있으면
-                    {
-                        playerHand.SetText("그만두려면 <color=yellow>(F)</color>"); //물체 텍스트 설정
-                        player.fixCamera = true;        // 화면 멈추고 커서 나타나기
-                        player.lockInventory = true;    // 인벤토리 잠금
-                    }
-                    else //비활성화 되어 있으면
-                    {
-                        playerHand.SetText("");
-                        player.fixCamera = false;
-                        player.lockInventory = false;
-                    }
+                    onTrigger = true; //범위에 들어갔는지 아닌지 판별
                 }
+
+                TryEvent();
             }
             else
             {
@@ -83,16 +70,9 @@ public class KeyPad : MonoBehaviour {
 
     void Update()
     {
-        if (showKeypadScreen)
+        if (showKeypadScreen) //키패드 활성화 되어 있으면
         {
-            keypadScreen.SetActive(true);
             GetInput(); //키패드 값 검사
-        }
-        else
-        {
-            keypadScreen.SetActive(false);
-            curInput = ""; //키패드 값 초기화
-            input.text = "";
         }
 
         if (doorOpen)
@@ -101,6 +81,38 @@ public class KeyPad : MonoBehaviour {
             transform.rotation = newRot;
         }
 
+    }
+
+    private void TryEvent()
+    {
+        if (onTrigger == true)   //F 누르면(1번 실행)
+        {
+            onTrigger = false;
+
+            if (!doorOpen)                              //문이 잠겨있는 경우
+            {
+                showKeypadScreen = !showKeypadScreen;   //키패드 활성/비활성화 하고
+            }
+
+            if (showKeypadScreen)  //키패드 활성화 되어 있으면
+            {
+                keypadScreen.SetActive(true);
+
+                playerHand.SetText("그만두려면 <color=yellow>(F)</color>"); //물체 텍스트 설정
+                player.fixCamera = true;        // 화면 멈추고 커서 나타나기
+                player.lockInventory = true;    // 인벤토리 잠금
+            }
+            else //비활성화 되어 있으면
+            {
+                keypadScreen.SetActive(false);
+                curInput = ""; //키패드 값 초기화
+                input.text = "";
+
+                playerHand.SetText("");
+                player.fixCamera = false;
+                player.lockInventory = false;
+            }
+        }
     }
 
     private void GetInput()

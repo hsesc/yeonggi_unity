@@ -7,6 +7,7 @@ public class LightSwitch : MonoBehaviour
 {
     public GameObject l_light;              //불빛
 
+    private bool onTrigger; //범위에 들어가서 에임을 맞추었는지 아닌지
     private bool lightOn;                   //불이 켜졌는지 아닌지
     private ActionController playerHand;
 
@@ -24,6 +25,13 @@ public class LightSwitch : MonoBehaviour
         {
             if (playerHand.hitinfo2.transform == transform.GetChild(0)) // 에임이 물체에 있는 상태에서
             {
+                if (Input.GetKeyDown(KeyCode.F)) //키 누르면
+                {
+                    onTrigger = true; //범위에 들어갔는지 아닌지 판별
+                }
+
+                TryEvent();
+
                 if (lightOn) //불빛 활성화되어 있으면
                 {
                     playerHand.SetText("불 끄려면 <color=yellow>(F)</color>"); //물체 텍스트 설정
@@ -31,11 +39,6 @@ public class LightSwitch : MonoBehaviour
                 else//비활성화 되어 있으면
                 {
                     playerHand.SetText("불 키려면 <color=yellow>(F)</color>");
-                }
-
-                if (playerHand.onTrigger == true)   //F 누르면(1번 실행)
-                {
-                    lightOn = !lightOn;             //불빛 활성화/비활성화
                 }
             }
             else
@@ -51,6 +54,16 @@ public class LightSwitch : MonoBehaviour
         {
             playerHand.SetText("");
             playerHand = null;
+        }
+    }
+
+    private void TryEvent()
+    {
+        if (onTrigger == true)   //F 누르면(1번 실행)
+        {
+            onTrigger = false;
+
+            lightOn = !lightOn;             //불빛 활성화/비활성화
         }
     }
 

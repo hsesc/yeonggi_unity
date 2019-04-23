@@ -29,9 +29,6 @@ public class ActionController : MonoBehaviour
     [SerializeField]
     private Text propText;                  //아이템이 아닌 물체에 대한 텍스트
 
-    [SerializeField]
-    private GameObject openBook;
-
     private List<GameObject> items = new List<GameObject>();// 3d 아이템 저장할 리스트
 
     [SerializeField]
@@ -56,13 +53,12 @@ public class ActionController : MonoBehaviour
         }
 
         inventory.SetActive(false);
-        openBook.SetActive(false);
     }
 
     // Update is called once per frame
     void Update()
     {
-        Search();           // F키 - 물체와 상호작용하는 함수
+        Search();           // F키(다른 스크립트에 있음) - 물체와 상호작용하는 함수
         ShowInventory();    // Q키 - 인벤토리 함수
         TryAction();        // E키 - 아이템 집고 떨어뜨리는 행동 함수
     }
@@ -70,18 +66,7 @@ public class ActionController : MonoBehaviour
     private void Search()
     {
         //동시에 여러 물체 상호작용을 막기위해 레이캐스트 사용
-        Physics.Raycast(transform.position, transform.forward, out hitinfo2, range, layerMask2); 
-
-        if (Input.GetKeyDown(KeyCode.F)) //키 누르면
-        {
-            onTrigger = true; //범위에 들어갔는지 아닌지 판별
-        }
-        // 가끔 안먹힐 때가 있음
-        // true -> 다른 스크립트 진행 -> false 되어야하는데 true -> false -> 다른 스크립트 진행.. 이렇게 되는 것 같다..
-        else 
-        {
-            onTrigger = false;
-        }
+        Physics.Raycast(transform.position, transform.forward, out hitinfo2, range, layerMask2);
     }
 
     public void SetText(string text) // 물체 텍스트 설정
@@ -107,10 +92,6 @@ public class ActionController : MonoBehaviour
             {
                 inventory.SetActive(false);
                 inventory.GetComponent<Inventory>().tooltip.SetActive(false); //인벤토리 닫을 때는 켜져 있을 툴팁도 없애야함
-                if (openBook.activeSelf == false) //책이 펼쳐져있지 않으면
-                {
-                    player.fixCamera = false; //화면 움직이기
-                }
             }
         }
     }
@@ -192,12 +173,6 @@ public class ActionController : MonoBehaviour
                 if (pickupActivated)
                 {
                     Debug.Log("읽고 있습니다");
-
-                    if (child.name == "Book1")
-                    {
-                        openBook.SetActive(true);
-                        player.fixCamera = true;
-                    } 
                 }
             }
         }
@@ -213,11 +188,6 @@ public class ActionController : MonoBehaviour
         child.transform.localPosition = new Vector3(0, 0, 1);
         got = true;
         child.SetActive(true);                                  //꺼낸 아이템 활성화
-
-        if (child.name == "Book1")
-        {
-            openBook.SetActive(true);
-        }
     }
 
     private void DropItem()
@@ -235,15 +205,6 @@ public class ActionController : MonoBehaviour
                 child.transform.GetChild(0).gameObject.SetActive(false);
             }
         }
-
-        if (child.name == "Book1")
-        {
-            openBook.SetActive(false);
-            if (showInventory == false)     //인벤토리가 닫혀있으면
-            {
-                player.fixCamera = false;   //화면 움직이기
-            }
-        }
     }
 
     public int DropItemToInventory() //Inventory.cs에서 사용, 인벤토리에서 아이템 꺼내는 함수
@@ -254,11 +215,6 @@ public class ActionController : MonoBehaviour
         child.transform.parent = null;
         got = false;
         child.SetActive(false);
-
-        if (child.name == "Book1")
-        {
-            openBook.SetActive(false);
-        }
         
         int i;
         for (i = 0; i < items.Count; i++)   //리스트 찾아서
