@@ -92,6 +92,8 @@ public class ActionController : MonoBehaviour
             {
                 inventory.SetActive(false);
                 inventory.GetComponent<Inventory>().tooltip.SetActive(false); //인벤토리 닫을 때는 켜져 있을 툴팁도 없애야함
+
+                player.fixCamera = false;
             }
         }
     }
