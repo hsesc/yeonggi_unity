@@ -75,7 +75,18 @@ public class Books : MonoBehaviour
     {
         if (bookEvent) //책 옮기기 이벤트 활성화인 경우
         {
+            for (int i = 0; i < transform.childCount; i++)
+            {
+                books[i].GetComponent<DragSwap>().active = true; // 옮기기 스크립트 활성화
+            }
             CompareBooks(); // 책 위치 비교
+        }
+        else
+        {
+            for (int i = 0; i < transform.childCount; i++)
+            {
+                books[i].GetComponent<DragSwap>().active = false;
+            }
         }
 
         if (targetEvent) //타겟 이벤트 활성화인 경우
@@ -98,22 +109,12 @@ public class Books : MonoBehaviour
 
             if (bookEvent) //책옮기기 이벤트 활성화 되어 있으면
             {
-                for (int i = 0; i < transform.childCount; i++)
-                {
-                    books[i].GetComponent<DragSwap>().active = true; // 옮기기 스크립트 활성화
-                }
-
                 playerHand.SetText("그만두려면 <color=yellow>(F)</color>"); //물체 텍스트 설정
                 player.fixCamera = true;        // 화면 멈추고 커서 나타나기
                 player.lockInventory = true;    // 인벤토리 잠금
             }
             else //비활성화 되어 있으면
             {
-                for (int i = 0; i < transform.childCount; i++)
-                {
-                    books[i].GetComponent<DragSwap>().active = false;
-                }
-
                 playerHand.SetText("");
                 player.fixCamera = false;
                 player.lockInventory = false;

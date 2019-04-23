@@ -72,7 +72,14 @@ public class KeyPad : MonoBehaviour {
     {
         if (showKeypadScreen) //키패드 활성화 되어 있으면
         {
+            keypadScreen.SetActive(true);
             GetInput(); //키패드 값 검사
+        }
+        else
+        {
+            keypadScreen.SetActive(false);
+            curInput = ""; //키패드 값 초기화
+            input.text = "";
         }
 
         if (doorOpen)
@@ -96,18 +103,12 @@ public class KeyPad : MonoBehaviour {
 
             if (showKeypadScreen)  //키패드 활성화 되어 있으면
             {
-                keypadScreen.SetActive(true);
-
                 playerHand.SetText("그만두려면 <color=yellow>(F)</color>"); //물체 텍스트 설정
                 player.fixCamera = true;        // 화면 멈추고 커서 나타나기
                 player.lockInventory = true;    // 인벤토리 잠금
             }
             else //비활성화 되어 있으면
             {
-                keypadScreen.SetActive(false);
-                curInput = ""; //키패드 값 초기화
-                input.text = "";
-
                 playerHand.SetText("");
                 player.fixCamera = false;
                 player.lockInventory = false;
@@ -137,7 +138,7 @@ public class KeyPad : MonoBehaviour {
         {
             showKeypadScreen = false;       //키패드 비활성화하고
             //(GetInput 함수의 상위 식을 비활성화 하므로 아래 식들은 1번만 실행됨)
-            doorOpen = true;                //문 열기고
+            doorOpen = true;                //문 열리고
 
             playerHand.SetText("");
             player.fixCamera = false;       //화면 움직이고
