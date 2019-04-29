@@ -27,7 +27,6 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     {
         if (item.itemValue > 0)                                     //슬롯에 아이템이 있고
         {
-            Debug.Log(item.itemName);
             if (playerHand.transform.childCount > 1)                //손에 든 아이템이 있을 때(0은 캔버스)
             {
                 SwapItem();                                         //아이템 스왑하고
@@ -69,21 +68,22 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     private void PushItem()
     {
         child = playerHand.transform.GetChild(1).gameObject;
+        Debug.Log(child.name + " - 넣기 완료");
         int index = playerHand.DropItemToInventory();
         inventory.AddItem(child.name, number, index);
-        Debug.Log(name + " - 넣기 완료");
     }
 
     private void PopItem()
     {
+        Debug.Log(item.itemName + " - 꺼내기 완료");
         playerHand.pickupItemFromInventory(item.itemID);
         inventory.RemoveItem(item.itemName, number);
-        Debug.Log(item.itemName + " - 꺼내기 완료");
     }
 
     private void SwapItem()
     {
         child = playerHand.transform.GetChild(1).gameObject;
+        Debug.Log(child.name + " & " + item.itemName + " - 아이템 스왑 완료");
 
         int id = item.itemID;
         inventory.RemoveItem(item.itemName, number);
@@ -92,7 +92,6 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
         inventory.AddItem(child.name, number, index);
 
         playerHand.pickupItemFromInventory(id);
-        Debug.Log(name + " - 아이템 스왑 완료");
     }
 
     /*
