@@ -27,9 +27,9 @@ public class Books : MonoBehaviour
     {
         if (collider.CompareTag("Player"))      //ComparTag 가 속도면에서 gameObject.tag 보다 나은것 같다
         {
-            if (playerHand.hitinfo2.transform == transform.GetChild(0)
-                || playerHand.hitinfo2.transform == transform.GetChild(1)
-                || playerHand.hitinfo2.transform == transform.GetChild(2)) // 에임이 물체에 있는 상태에서
+            if (playerHand.hitinfo.transform == transform.GetChild(0)
+                || playerHand.hitinfo.transform == transform.GetChild(1)
+                || playerHand.hitinfo.transform == transform.GetChild(2)) // 에임이 물체에 있는 상태에서
             {
                 if (Input.GetKeyDown(KeyCode.F)) //키 누르면
                 {

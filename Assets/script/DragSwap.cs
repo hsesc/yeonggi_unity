@@ -50,7 +50,7 @@ public class DragSwap : MonoBehaviour {
 
     void OnTriggerEnter(Collider collider) // 스왑하는 부분
     {
-        if (collider.gameObject.layer == 9) //레이어가 Prop인 경우
+        if (collider.gameObject.layer == 8) //레이어가 Item인 경우
         {
             prePosition = collider.gameObject.transform.position;   //다음 위치 설정
             collider.gameObject.transform.position = curPosition;   //물체를 현재 위치로

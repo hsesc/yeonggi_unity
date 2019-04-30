@@ -5,8 +5,6 @@ using UnityEngine.UI;
 
 public class ActionController : MonoBehaviour
 {
-    public bool onTrigger;                  //범위에 들어갔는지 아닌지
-
     private bool got = false;               //아이템을 들고있는지 아닌지
 
     [SerializeField]                        // 이 표시 있으면 외부에서 값을 가져와도 내부에서 보호할 수 있음
@@ -14,20 +12,16 @@ public class ActionController : MonoBehaviour
 
     private bool pickupActivated = false;   //습득 가능한지 아닌지
 
-    private RaycastHit hitinfo1;            //layerMask1의 충돌체 정보 저장
-    public RaycastHit hitinfo2;             //layerMask2의 충돌체 정보 저장
+    public RaycastHit hitinfo;              //layerMask의 충돌체 정보 저장
 
     //아이템 레이어에만 반응하도록 레이어마스크 설정
     [SerializeField]
-    private LayerMask layerMask1;           //Item
-    [SerializeField]
-    private LayerMask layerMask2;           //Prop
+    private LayerMask layerMask;            //Item
 
     //필요한 컴포넌트
     [SerializeField]
-    private Text ItemText;                  //아이템(layer: Item)에 대한 텍스트
-    [SerializeField]
-    private Text propText;                  //아이템이 아닌 물체에 대한 텍스트
+    private Text actionText;                //아이템이 아닌 물체에 대한 텍스트
+    Outline masking;                        //외곽선 설정
 
     private List<GameObject> items = new List<GameObject>();// 3d 아이템 저장할 리스트
 
@@ -41,7 +35,6 @@ public class ActionController : MonoBehaviour
     void Start()
     {
         player = GameObject.FindWithTag("Player").GetComponent<UnityStandardAssets.Characters.FirstPerson.FirstPersonController>();
-
         //3d 아이템들 저장(다른 방식으로 바꿈)
         //items.Add(GameObject.Find("Key1"));
         //items.Add(GameObject.Find("Book1"));
@@ -58,22 +51,11 @@ public class ActionController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Search();           // F키(다른 스크립트에 있음) - 물체와 상호작용하는 함수
-        ShowInventory();    // Q키 - 인벤토리 함수
-        TryAction();        // E키 - 아이템 집고 떨어뜨리는 행동 함수
+        //ShowInventory();    // Q키 - 인벤토리 함수
+        TryAction();        // R키 - 아이템 집고 떨어뜨리는 행동 함수
+                            // F키(다른 스크립트에 있음) - 물체와 상호작용하는 함수
     }
-
-    private void Search()
-    {
-        //동시에 여러 물체 상호작용을 막기위해 레이캐스트 사용
-        Physics.Raycast(transform.position, transform.forward, out hitinfo2, range, layerMask2);
-    }
-
-    public void SetText(string text) // 물체 텍스트 설정
-    {
-        propText.text = text;
-    }
-
+    /*
     private void ShowInventory()
     {
         if (Input.GetKeyDown(KeyCode.Q)) //키 누르고
@@ -96,16 +78,24 @@ public class ActionController : MonoBehaviour
                 player.fixCamera = false;
             }
         }
+    }*/
+
+    public void SetText(string text) // 물체 텍스트 설정
+    {
+        actionText.text = text;
     }
 
     private void TryAction()
     {
         CheckItem(); //어떤 아이템인지 보고 아이템 텍스트 설정
-        if (Input.GetKeyDown(KeyCode.E)) //키 누르고
+        if (Input.GetKeyDown(KeyCode.R)) //키 누르고
         {
             if (got == false) //손에 들고 있는게 없으면
             {
-                PickupItem(); //물체를 드는 함수
+                if (pickupActivated == true)// 습득가능한 상태가 되면
+                {
+                    PickupItem(); //물체를 드는 함수
+                }
             }
             else //손에 들고 있는게 있으면
             {
@@ -116,65 +106,52 @@ public class ActionController : MonoBehaviour
 
     private void CheckItem()
     {
-        if (Physics.Raycast(transform.position, transform.forward,  //transform.forward = transform.TransformDirection(Vector3,forward)
-                out hitinfo1, range, layerMask1)) //광선쏘기(플레이어의위치,플레이어가 바라보는 z축방향, 충돌체정보, 사정거리, 레이어마스크)
-        { //레이캐스트에 닿으면
-            pickupActivated = true; //습득 가능한 상태가 되고
-            if (got == false) //손에 들고 있는게 없으면
+        if (Physics.Raycast(transform.position, transform.forward, //transform.forward = transform.TransformDirection(Vector3,forward)
+                out hitinfo, range, layerMask)) //광선쏘기(플레이어의위치,플레이어가 바라보는 z축방향, 충돌체정보, 사정거리, 레이어마스크)
+        { 
+            if(masking != null) //이전 마스킹은 해제
             {
-                if (hitinfo1.transform.tag == "getItem") //레이캐스트에 닿은 물체의 태그가 다음과 같을 시
-                {
-                    ItemText.text = "획득하려면 <color=yellow>(E)</color>"; //아이템 텍스트 설정
-                }
-                else if (hitinfo1.transform.tag == "readItem")
-                {
-                    ItemText.text = "읽어보려면 <color=yellow>(E)</color>";
-                }
+                masking.enabled = false;
             }
-            else //손에 들고 있는게 있으면
+            masking = hitinfo.transform.GetComponent<Outline>(); //외곽선 설정하고
+            masking.enabled = true;
+
+            if (hitinfo.transform.tag == "getItem") //레이캐스트에 닿은 물체의 태그가 다음과 같을 시
             {
-                ItemText.text = "";
+                pickupActivated = true; //습득 가능한 상태가 됨
             }
         }
         else //레이캐스트를 벗어나면
         {
+            if (masking != null) //외곽선 해제하고
+            {
+                masking.enabled = false;
+                masking = null;
+            }
+
             pickupActivated = false; //습득 불가능한 상태가 됨
-            ItemText.text = ""; 
         }
     }
 
     private void PickupItem()
     {
-        if (hitinfo1.transform != null)                              // 레이캐스트에 닿은게 있으면
+        GameObject child = hitinfo.transform.gameObject;       //레이캐스트에 닿은 물체를
+        child.transform.parent = this.transform;                //자식으로 설정하고
+        child.GetComponent<Rigidbody>().useGravity = false;     //중력 비활성화
+        child.GetComponent<BoxCollider>().isTrigger = true;     //트리거 활성화
+        child.transform.localPosition = new Vector3(0.5f, 0, 1);//위치 설정
+        got = true;                                             //아이템을 들고 있지 않다고 설정한다
+
+        if (hitinfo.transform.tag == "getItem")
         {
-            GameObject child = hitinfo1.transform.gameObject;        //레이캐스트에 닿은 물체를
-            child.transform.parent = this.transform;                //자식으로 설정하고
-            child.GetComponent<Rigidbody>().useGravity = false;     //중력 비활성화
-            child.GetComponent<BoxCollider>().isTrigger = true;     //트리거 활성화
-            child.transform.localPosition = new Vector3(0, 0, 1);   //위치설정
-            got = true;                                             //아이템을 들고 있지 않다고 설정한다
+            Debug.Log("획득했습니다.");
 
-            if (hitinfo1.transform.tag == "getItem")
+            if (child.name == "Flash") // 후레시를 들었을 경우
             {
-                if (pickupActivated)
+                if (child.transform.childCount > 0)
                 {
-                    Debug.Log("획득했습니다.");
-
-                    if (child.name == "Flash")
-                    {
-                        if (child.transform.childCount > 0)
-                        {
-                            child.transform.GetChild(0).gameObject.SetActive(true);
-                            child.transform.localRotation = Quaternion.Euler(0, -90, -100);
-                        }
-                    }
-                }
-            }
-            else if (hitinfo1.transform.tag == "readItem")
-            {
-                if (pickupActivated)
-                {
-                    Debug.Log("읽고 있습니다");
+                    child.transform.GetChild(0).gameObject.SetActive(true); //후레시 키고
+                    child.transform.localRotation = Quaternion.Euler(0, -100, -100); //방향 설정
                 }
             }
         }
@@ -187,7 +164,7 @@ public class ActionController : MonoBehaviour
         child.transform.parent = this.transform;
         child.GetComponent<Rigidbody>().useGravity = false;
         child.GetComponent<BoxCollider>().isTrigger = true;
-        child.transform.localPosition = new Vector3(0, 0, 1);
+        child.transform.localPosition = new Vector3(0.5f, 0, 1);
         got = true;
         child.SetActive(true);                                  //꺼낸 아이템 활성화
     }
@@ -200,11 +177,11 @@ public class ActionController : MonoBehaviour
         child.transform.parent = null;
         got = false;
 
-        if (child.name == "Flash")
+        if (child.name == "Flash") // 후레시를 들었을 경우
         {
             if (child.transform.childCount > 0)
             {
-                child.transform.GetChild(0).gameObject.SetActive(false);
+                child.transform.GetChild(0).gameObject.SetActive(false); //후레시 끄기
             }
         }
     }
