@@ -1,4 +1,4 @@
 sceneSetups:
-- path: C:/Users/multimedia/Desktop/New Unity Project/test version/Assets/scenes/test.unity
+- path: Assets/Dnk_Dev/HospitalHorrorPack/Scene/Map_Hosp1.unity
   isLoaded: 1
   isActive: 1
