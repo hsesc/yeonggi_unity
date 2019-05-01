@@ -36,6 +36,6 @@ public class Item {
         itemValue = val;
         itemDescription = desc;
         itemType = type;
-        itemImage = Resources.Load<Sprite>("itemImages/34x34icons180709_" + img);
+        itemImage = Resources.Load<Sprite>("Icons/" + img);
     }
 }

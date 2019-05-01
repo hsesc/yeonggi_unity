@@ -51,14 +51,14 @@ public class ActionController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //ShowInventory();    // Q키 - 인벤토리 함수
+        ShowInventory();    // Q키 - 인벤토리 함수
         TryAction();        // R키 - 아이템 집고 떨어뜨리는 행동 함수
                             // F키(다른 스크립트에 있음) - 물체와 상호작용하는 함수
     }
-    /*
+    
     private void ShowInventory()
     {
-        if (Input.GetKeyDown(KeyCode.Q)) //키 누르고
+        if (Input.GetKeyDown(KeyCode.C)) //키 누르고
         {
             if (player.lockInventory == false) // 인벤토리 잠금되어 있지 않다면
             {
@@ -78,7 +78,7 @@ public class ActionController : MonoBehaviour
                 player.fixCamera = false;
             }
         }
-    }*/
+    }
 
     public void SetText(string text) // 물체 텍스트 설정
     {

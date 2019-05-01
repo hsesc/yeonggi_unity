@@ -28,6 +28,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
         [SerializeField] private AudioClip m_JumpSound;           // the sound played when character leaves the ground.
         [SerializeField] private AudioClip m_LandSound;           // the sound played when character touches back on ground.
 
+
         private Camera m_Camera;
         private bool m_Jump;
         private float m_YRotation;
@@ -44,7 +45,6 @@ namespace UnityStandardAssets.Characters.FirstPerson
 
         public bool fixCamera;
         public bool lockInventory;
-
         // Use this for initialization
         private void Start()
         {
@@ -61,7 +61,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
 
             fixCamera = false;
             lockInventory = false;
-    }
+        }
 
 
         // Update is called once per frame
@@ -92,6 +92,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
              * 위와 같은 식으로 사용 가능*/
             //--------------------------------------------
 
+            // the jump state needs to read here to make sure it is not missed
             // the jump state needs to read here to make sure it is not missed
             if (!m_Jump)
             {
@@ -132,7 +133,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
             // get a normal for the surface that is being touched to move along it
             RaycastHit hitInfo;
             Physics.SphereCast(transform.position, m_CharacterController.radius, Vector3.down, out hitInfo,
-                               m_CharacterController.height/2f, Physics.AllLayers, QueryTriggerInteraction.Ignore);
+                               m_CharacterController.height/2f);
             desiredMove = Vector3.ProjectOnPlane(desiredMove, hitInfo.normal).normalized;
 
             m_MoveDir.x = desiredMove.x*speed;
@@ -159,9 +160,8 @@ namespace UnityStandardAssets.Characters.FirstPerson
 
             ProgressStepCycle(speed);
             UpdateCameraPosition(speed);
-
-            m_MouseLook.UpdateCursorLock();
         }
+
 
         private void PlayJumpSound()
         {
