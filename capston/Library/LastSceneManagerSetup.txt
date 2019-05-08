@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Dnk_Dev/HospitalHorrorPack/Scene/Map_Hosp1.unity
+- path: Assets/Dnk_Dev/HospitalHorrorPack/Scene/newroom.unity
   isLoaded: 1
   isActive: 1
