@@ -7,15 +7,13 @@ public class DrawerOpen : MonoBehaviour
     private Vector3 initPos;    //원래 위치
     private bool drawerOpen;    //서랍이 열렸는지 아닌지
 
-    private bool onTrigger; //범위에 들어가서 에임을 맞추었는지 아닌지
-    private ActionController playerHand;
+    private OVRActionController playerHand;
 
     void OnTriggerEnter(Collider collider)
     {
         if (collider.CompareTag("Player"))
         {
-            playerHand = GameObject.FindWithTag("MainCamera").GetComponent<ActionController>();
-            onTrigger = true; //범위에 들어갔는지 아닌지 판별
+            playerHand = GameObject.FindWithTag("MainCamera").GetComponent<OVRActionController>();
         }
     }
 
@@ -23,8 +21,8 @@ public class DrawerOpen : MonoBehaviour
     {
         if (collider.CompareTag("Player"))
         {
+            playerHand.onTrigger = false;
             playerHand = null;
-            onTrigger = false;
         }
     }
 
@@ -34,7 +32,7 @@ public class DrawerOpen : MonoBehaviour
         initPos = transform.position;
     }
 
-    // Update is called once per frame
+    // Update is called once per frame -> OnTriggerStay보다 자연스러움
     void Update()
     {
         TryEvent();
@@ -42,14 +40,20 @@ public class DrawerOpen : MonoBehaviour
 
     private void TryEvent()
     {
-        if (onTrigger) // 범위에 들어갔고
+        if (playerHand) // 범위에 들어갔고
         {
             if (playerHand.hitinfo.transform == transform.GetChild(0)) // 에임이 물체에 있는 상태에서
             {
-                if (Input.GetKeyDown(KeyCode.F)) //키 누르면(한 번만 실행할 부분)
+                playerHand.onTrigger = true; //범위에 들어갔는지 아닌지 알려줌
+
+                if (OVRInput.GetDown(OVRInput.Button.One)) //키 누르면(한 번만 실행할 부분)
                 {
                     drawerOpen = !drawerOpen;       //서랍 열리기 활성화/비활성화
                 }
+            }
+            else
+            {
+                playerHand.onTrigger = false;
             }
         }
 

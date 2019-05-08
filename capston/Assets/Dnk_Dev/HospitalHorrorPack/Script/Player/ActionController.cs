@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class ActionController : MonoBehaviour
 {
+    public bool onTrigger;                  //범위에 들어갔는지 아닌지
+
     private bool got = false;               //아이템을 들고있는지 아닌지
 
     [SerializeField]                        // 이 표시 있으면 외부에서 값을 가져와도 내부에서 보호할 수 있음
@@ -16,7 +18,7 @@ public class ActionController : MonoBehaviour
 
     //아이템 레이어에만 반응하도록 레이어마스크 설정
     [SerializeField]
-    private LayerMask layerMask;            //Item
+    private LayerMask layerMask;
 
     //필요한 컴포넌트
     [SerializeField]
@@ -87,7 +89,11 @@ public class ActionController : MonoBehaviour
 
     private void TryAction()
     {
-        CheckItem(); //어떤 아이템인지 보고 아이템 텍스트 설정
+        if (onTrigger) //범위에 들어갔다면
+        {
+            CheckItem(); //어떤 아이템인지 보고 아이템 외곽선 설정
+        }
+
         if (Input.GetKeyDown(KeyCode.R)) //키 누르고
         {
             if (got == false) //손에 들고 있는게 없으면
@@ -116,7 +122,7 @@ public class ActionController : MonoBehaviour
             masking = hitinfo.transform.GetComponent<Outline>(); //외곽선 설정하고
             masking.enabled = true;
 
-            if (hitinfo.transform.tag == "getItem") //레이캐스트에 닿은 물체의 태그가 다음과 같을 시
+            if (hitinfo.transform.tag == "Gettable") //레이캐스트에 닿은 물체의 태그가 다음과 같을 시
             {
                 pickupActivated = true; //습득 가능한 상태가 됨
             }
@@ -139,7 +145,7 @@ public class ActionController : MonoBehaviour
         child.transform.parent = this.transform;                //자식으로 설정하고
         child.GetComponent<Rigidbody>().useGravity = false;     //중력 비활성화
         child.GetComponent<BoxCollider>().isTrigger = true;     //트리거 활성화
-        child.transform.localPosition = new Vector3(0.5f, 0, 1);//위치 설정
+        child.transform.localPosition = new Vector3(0.3f, 0, 0.5f);//위치 설정
         child.transform.localRotation = Quaternion.Euler(0, -90, 90); //방향 설정
         got = true;                                             //아이템을 들고 있지 않다고 설정한다
 
@@ -165,7 +171,7 @@ public class ActionController : MonoBehaviour
         child.transform.parent = this.transform;
         child.GetComponent<Rigidbody>().useGravity = false;
         child.GetComponent<BoxCollider>().isTrigger = true;
-        child.transform.localPosition = new Vector3(0.5f, 0, 1);
+        child.transform.localPosition = new Vector3(0.3f, 0, 0.5f);
         got = true;
         child.SetActive(true);                                  //꺼낸 아이템 활성화
     }

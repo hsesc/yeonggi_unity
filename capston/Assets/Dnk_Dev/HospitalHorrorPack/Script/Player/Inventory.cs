@@ -9,7 +9,7 @@ public class Inventory : MonoBehaviour
     public List<Slot> slots = new List<Slot>(); //슬롯 리스트(인벤토리)
     public GameObject tooltip;                  //툴팁
 
-    private itemDatabase db;                    //아이템 데이터베이스
+    private ItemDatabase db;                    //아이템 데이터베이스
 
     // Use this for initialization
     void Start()
@@ -22,7 +22,7 @@ public class Inventory : MonoBehaviour
         }
 
         tooltip.SetActive(false);
-        db = GameObject.FindGameObjectWithTag("Item Database").GetComponent<itemDatabase>();
+        db = GameObject.FindGameObjectWithTag("Item Database").GetComponent<ItemDatabase>();
     }
 
     void Update()

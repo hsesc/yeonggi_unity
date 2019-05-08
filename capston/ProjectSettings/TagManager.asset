@@ -5,7 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - Inventory
-  - getItem
+  - ItemDatabase
+  - Gettable
   layers:
   - Default
   - TransparentFX
@@ -16,8 +17,8 @@ TagManager:
   - 
   - 
   - PostProcessing
-  - Item
-  - 
+  - Interactable
+  - Grabbable
   - 
   - 
   - 
