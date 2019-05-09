@@ -62,12 +62,28 @@ public class DrawerOpen : MonoBehaviour
             var newPos = Vector3.MoveTowards
                 (transform.position, new Vector3(initPos.x, initPos.y, initPos.z - 0.5f), 0.05f);
             transform.position = newPos; //원래 위치에서 z 방향으로 약간 이동
+
+            if (transform.childCount > 0)
+            {
+                for (int i = 0; i < transform.childCount; i++)
+                {
+                    transform.GetChild(i).gameObject.SetActive(true);
+                }
+            }
         }
         else// 닫히면
         {
             var newPos = Vector3.MoveTowards
                 (transform.position, new Vector3(initPos.x, initPos.y, initPos.z), 0.05f);
             transform.position = newPos; //원래 위치로
+
+            if(transform.childCount > 0)
+            {
+                for(int i = 0; i < transform.childCount; i++)
+                {
+                    transform.GetChild(i).gameObject.SetActive(false);
+                }
+            }
         }
     }
 }
