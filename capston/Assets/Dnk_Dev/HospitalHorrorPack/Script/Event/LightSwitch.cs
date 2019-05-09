@@ -31,7 +31,7 @@ public class LightSwitch : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        l_light.SetActive(false);
+
     }
 
     // Update is called once per frame -> OnTriggerStay보다 자연스러움
