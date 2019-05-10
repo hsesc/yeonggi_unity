@@ -59,17 +59,17 @@ public class DrawerOpen : MonoBehaviour
 
         if (drawerOpen) //서랍 열리면
         {
-            var newPos = Vector3.MoveTowards
-                (transform.position, new Vector3(initPos.x, initPos.y, initPos.z - 0.5f), 0.05f);
-            transform.position = newPos; //원래 위치에서 z 방향으로 약간 이동
-
-            if (transform.childCount > 0)
+            if (transform.childCount > 0) //안에 있는 물건 나타나고
             {
                 for (int i = 0; i < transform.childCount; i++)
                 {
                     transform.GetChild(i).gameObject.SetActive(true);
                 }
             }
+
+            var newPos = Vector3.MoveTowards
+                (transform.position, new Vector3(initPos.x, initPos.y, initPos.z - 0.5f), 0.05f);
+            transform.position = newPos; //원래 위치에서 z 방향으로 약간 이동
         }
         else// 닫히면
         {
@@ -77,7 +77,7 @@ public class DrawerOpen : MonoBehaviour
                 (transform.position, new Vector3(initPos.x, initPos.y, initPos.z), 0.05f);
             transform.position = newPos; //원래 위치로
 
-            if(transform.childCount > 0)
+            if(transform.childCount > 0) //안에 있는 물건 사라짐
             {
                 for(int i = 0; i < transform.childCount; i++)
                 {
