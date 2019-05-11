@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class RadioSlider : MonoBehaviour
 {
     public GameObject target;
+    public GameObject item;
 
     public GameObject sliderScreen;     //슬라이더
     public Text frequency;              //주파수 값
@@ -69,7 +70,7 @@ public class RadioSlider : MonoBehaviour
             }
         }
 
-        if (showSliderScreen) //키패드 활성화 되어 있으면
+        if (showSliderScreen) //슬라이더 활성화 되어 있으면
         {
             sliderScreen.SetActive(true);
 
@@ -86,8 +87,14 @@ public class RadioSlider : MonoBehaviour
 
         if (doorOpen)
         {
-            var newRot = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(0.0f, 0.0f, -90.0f), Time.deltaTime * 200);
-            target.transform.rotation = newRot;
+            item.SetActive(true); //아이템 나타나고
+
+            var newRot = Quaternion.RotateTowards(target.transform.localRotation, Quaternion.Euler(0.0f, 0.0f, -90.0f), Time.deltaTime * 200);
+            target.transform.localRotation = newRot; //문열림
+        }
+        else
+        {
+            item.SetActive(false);
         }
     }
 }

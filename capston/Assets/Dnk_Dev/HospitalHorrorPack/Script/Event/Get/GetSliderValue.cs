@@ -22,7 +22,6 @@ public class GetSliderValue : MonoBehaviour
             if (time > wait) //일정시간 이상 경과하면
             {
                 GetComponent<Text>().text = "CORRECT";
-                time = 0.0f;
             }
         }
         else //알맞는 값이 아닐 경우 시간 초기화
