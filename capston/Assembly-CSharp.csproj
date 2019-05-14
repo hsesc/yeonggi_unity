@@ -385,7 +385,7 @@
     <Compile Include="Assets\Store Assets\Sharing\IconGenerator\IconGeneratorUIExample.cs" />
     <Compile Include="Assets\Store Assets\Sharing\IconGenerator\TextureScale.cs" />
     <Compile Include="Assets\Store Assets\Sharing\QuickOutline\Scripts\Outline.cs" />
-    <None Include="Assets\Resources\Aubergine\Shaders\Object\BaseFX\Baloon-Overlay.shader" />
+    <None Include="Assets\Store Assets\BigRoom2\BallonShader\Resources\Aubergine\Shaders\Object\BaseFX\Baloon-Overlay.shader" />
     <None Include="Assets\Store Assets\Sharing\IconGenerator\Readme.txt" />
     <None Include="Assets\Oculus\Avatar\Resources\Materials\Version1.5\Avatar_PC_SingleComponent.shader" />
     <None Include="Assets\Oculus\Avatar\Samples\CrossPlatform\Readme.txt" />
@@ -397,9 +397,9 @@
     <None Include="Assets\Oculus\SampleFramework\Core\CustomHands\Materials\Hands_Transparent.shader" />
     <None Include="Assets\Store Assets\Sharing\QuickOutline\Readme.txt" />
     <None Include="Assets\Oculus\Avatar\Resources\Materials\Version1.5\Avatar_Mobile_Loader.shader" />
-    <None Include="Assets\Resources\Aubergine\Shaders\Object\BaseFX\Baloon.shader" />
+    <None Include="Assets\Store Assets\BigRoom2\BallonShader\Resources\Aubergine\Shaders\Object\BaseFX\Baloon.shader" />
     <None Include="Assets\Oculus\SampleFramework\Core\CustomHands\Shaders\Hands_02.shader" />
-    <None Include="Assets\Store Assets\BigRoom2\Aubergine\Store Demos\Baloon Shader\Readme.txt" />
+    <None Include="Assets\Store Assets\BigRoom2\BallonShader\Aubergine\Store Demos\Baloon Shader\Readme.txt" />
     <None Include="Assets\Oculus\SampleFramework\Usage\Stereo180Video\Plugins\Android\Audio360\ThirdPartyNotices.txt" />
     <None Include="Assets\Store Assets\Sharing\IconGenerator\HowToUse.txt" />
     <None Include="Assets\Oculus\Avatar\Resources\Materials\AvatarSurfaceShaderSelfOccluding.shader" />
@@ -414,7 +414,7 @@
     <None Include="Assets\Oculus\Avatar\Resources\Materials\Expressive\Avatar_Mobile_SingleComponentExpressive.shader" />
     <None Include="Assets\Store Assets\BigRoom2\Clipboard\ReadMe\ReadMe.txt" />
     <None Include="Assets\Store Assets\Sharing\QuickOutline\Resources\Shaders\OutlineMask.shader" />
-    <None Include="Assets\Store Assets\BigRoom2\Aubergine\Store Demos\Baloon Shader\Diffuse-Baloon-Overlay.shader" />
+    <None Include="Assets\Store Assets\BigRoom2\BallonShader\Aubergine\Store Demos\Baloon Shader\Diffuse-Baloon-Overlay.shader" />
     <None Include="Assets\Oculus\SampleFramework\Core\DebugUI\Fonts\Montserrat\OFL.txt" />
     <None Include="Assets\Oculus\Avatar\Resources\Materials\AvatarSurfaceShaderPBSV2.shader" />
     <None Include="Assets\Oculus\Avatar\Resources\Materials\Version1.5\Avatar_Mobile_SingleComponent.shader" />
@@ -423,7 +423,7 @@
     <None Include="Assets\Oculus\Avatar\Resources\Materials\Expressive\AvatarEyeLens.shader" />
     <None Include="Assets\Oculus\Avatar\Resources\Materials\AvatarSurfaceShader.shader" />
     <None Include="Assets\Oculus\SampleFramework\Usage\DistanceGrab\Materials\ToyCubeWithOutline.shader" />
-    <None Include="Assets\Store Assets\BigRoom2\Aubergine\Store Demos\Baloon Shader\Diffuse-Baloon.shader" />
+    <None Include="Assets\Store Assets\BigRoom2\BallonShader\Aubergine\Store Demos\Baloon Shader\Diffuse-Baloon.shader" />
     <None Include="Assets\Oculus\SampleFramework\Usage\DistanceGrab\Materials\CrosshairZCheat.shader" />
     <Reference Include="Unity.TextMeshPro.Editor">
       <HintPath>C:/Users/multimedia/Desktop/New Unity Project/capston/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
