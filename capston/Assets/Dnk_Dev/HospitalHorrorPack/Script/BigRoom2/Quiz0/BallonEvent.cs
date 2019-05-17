@@ -8,11 +8,11 @@ public class BallonEvent : MonoBehaviour
 
     private void OnTriggerEnter(Collider collider)
     {
-        if(collider.name == "Bullet_45mm_Bullet")
+        if(collider.name == "Bullet_45mm_Bullet(Clone)")
         {
             item.GetComponent<Rigidbody>().useGravity = true;
             item.GetComponent<OculusSampleFramework.DistanceGrabbable>().enabled = true;
-            Destroy(transform);
+            Destroy(gameObject);
         }
     }
 

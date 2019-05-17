@@ -4,5 +4,17 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Dnk_Dev/HospitalHorrorPack/Scene/MainMenu.unity
+    guid: 64f8dbb7256e3974fac176c6c9771146
+  - enabled: 1
+    path: Assets/Dnk_Dev/HospitalHorrorPack/Scene/Help.unity
+    guid: 62529f26a318a8549beda5b47b936e28
+  - enabled: 1
+    path: Assets/Dnk_Dev/HospitalHorrorPack/Scene/Loading.unity
+    guid: 5daed5ce01d1aaf4aafc720355613116
+  - enabled: 1
+    path: Assets/Dnk_Dev/HospitalHorrorPack/Scene/New_Rooms.unity
+    guid: 152aa98063451fe40b1f4b3a028ad69a
   m_configObjects: {}

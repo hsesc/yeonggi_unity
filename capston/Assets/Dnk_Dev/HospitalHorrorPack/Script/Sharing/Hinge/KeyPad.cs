@@ -56,9 +56,9 @@ public class KeyPad : MonoBehaviour
 
                 if (OVRInput.GetDown(OVRInput.Button.One)) //키 누르면(한 번만 실행할 부분)
                 {
-                    if (!doorOpen)                              //문이 잠겨있는 경우
+                    if (!doorOpen) //문이 잠겨있는 경우
                     {
-                        showKeypadScreen = !showKeypadScreen;   //키패드 활성/비활성화 하고
+                        showKeypadScreen = true; //키패드 활성
                     }
                 }
             }

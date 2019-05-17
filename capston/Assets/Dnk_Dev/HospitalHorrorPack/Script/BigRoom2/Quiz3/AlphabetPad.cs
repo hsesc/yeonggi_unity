@@ -55,9 +55,9 @@ public class AlphabetPad : MonoBehaviour
 
                 if (OVRInput.GetDown(OVRInput.Button.One)) //키 누르면(한 번만 실행할 부분)
                 {
-                    if (!doorOpen)                              //문이 잠겨있는 경우
+                    if (!doorOpen) //문이 잠겨있는 경우
                     {
-                        showAlphabetScreen = !showAlphabetScreen;   //알파벳 활성/비활성화 하고
+                        showAlphabetScreen = true; //알파벳 활성
                     }
                 }
             }
