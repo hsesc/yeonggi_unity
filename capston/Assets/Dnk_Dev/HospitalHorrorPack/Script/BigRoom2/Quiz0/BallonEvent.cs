@@ -8,7 +8,7 @@ public class BallonEvent : MonoBehaviour
 
     private void OnTriggerEnter(Collider collider)
     {
-        if(collider.name == "Bullet_45mm_Bullet(Clone)")
+        if(collider.name == "Bullet_45mm_Bullet(Clone)" || collider.name == "SpikeBall")
         {
             item.GetComponent<Rigidbody>().useGravity = true;
             item.GetComponent<OculusSampleFramework.DistanceGrabbable>().enabled = true;

@@ -5,10 +5,10 @@ using UnityEngine;
 public class KeyDoor : MonoBehaviour
 {
     public string keyName;
+    private GameObject key;
 
     private bool openable;   //열 수 있는지 아닌지
     private bool doorOpen;  //문이 열렸는지 아닌지
-    private GameObject key;
 
     private OVRActionController playerHand;
 
@@ -18,22 +18,12 @@ public class KeyDoor : MonoBehaviour
         {
             playerHand = GameObject.FindWithTag("MainCamera").GetComponent<OVRActionController>();
         }
-    }
 
-    private void OnTriggerStay(Collider collider)
-    {
-        if (collider.name == keyName) //문의 키와 이름이 같은 물체가
+        if (collider.name == keyName) //문의 키와 이름이 같은 물체를
         {
             if (collider.gameObject.layer == 10)
             {
-                if (collider.GetComponent<OculusSampleFramework.DistanceGrabbable>().isGrabbed) //손에 잡혀 있을 경우
-                {
-                    key = collider.gameObject;
-                }
-                else
-                {
-                    key = null;
-                }
+                key = collider.gameObject; //키로 설정
             }
         }
     }
@@ -77,7 +67,7 @@ public class KeyDoor : MonoBehaviour
                 {
                     if (!doorOpen)                  //문이 닫혀있고
                     {
-                        if (key != null)            //키가 있는 경우
+                        if (key && key.GetComponent<OVRGrabbable>().isGrabbed) //키가 손에 잡혀있다면
                         {
                             Destroy(key);           //키가 사라지고
                             key = null;

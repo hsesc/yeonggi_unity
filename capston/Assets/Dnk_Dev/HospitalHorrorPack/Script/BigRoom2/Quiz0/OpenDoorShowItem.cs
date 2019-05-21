@@ -16,6 +16,8 @@ public class OpenDoorShowItem : MonoBehaviour
         if (collider.CompareTag("Finger"))
         {
             dooropen = true;
+            OVRGrabber ovrGrabber = collider.GetComponentInParent<OVRGrabber>();
+            VibrationManager.singleton.TriggerVibration(20, 2, 128, ovrGrabber.GetController());
         }
     }
 

@@ -28,6 +28,13 @@ public class ShootIfGrabbed : MonoBehaviour
     {
         if (ovrGrabbable.isGrabbed && OVRInput.GetDown(shootingButton, ovrGrabbable.grabbedBy.GetController()) && maxNumberOfBullet > 0)
         {
+            //Trigger Haptic:
+            //DONT DO THIS !! OVRInput.SetControllerVibration(0.5f, 0.5f, ovrGrabbable.grabbedBy.GetController());
+
+            //DO THIS
+            //VibrationManager.singleton.TriggerVibration(shootingAudio, ovrGrabbable.grabbedBy.GetController());
+            VibrationManager.singleton.TriggerVibration(40, 2, 255, ovrGrabbable.grabbedBy.GetController());
+
             GetComponent<AudioSource>().PlayOneShot(shootingAudio);
 
             simpleShoot.TriggerShoot();

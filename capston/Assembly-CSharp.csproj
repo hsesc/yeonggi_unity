@@ -69,7 +69,9 @@
     <Compile Include="Assets\Dnk_Dev\HospitalHorrorPack\Script\BigRoom2\Quiz2\RadioSlider.cs" />
     <Compile Include="Assets\Dnk_Dev\HospitalHorrorPack\Script\BigRoom2\Quiz3\AlphabetPad.cs" />
     <Compile Include="Assets\Dnk_Dev\HospitalHorrorPack\Script\BigRoom2\Quiz3\GetDropdownValue.cs" />
+    <Compile Include="Assets\Dnk_Dev\HospitalHorrorPack\Script\BigRoom2\Quiz4\FollowObjectTransform.cs" />
     <Compile Include="Assets\Dnk_Dev\HospitalHorrorPack\Script\BigRoom2\Quiz4\MoveMagnet.cs" />
+    <Compile Include="Assets\Dnk_Dev\HospitalHorrorPack\Script\BigRoom2\Quiz4\OpenIfDropBall.cs" />
     <Compile Include="Assets\Dnk_Dev\HospitalHorrorPack\Script\NotUsed\ActionController.cs" />
     <Compile Include="Assets\Dnk_Dev\HospitalHorrorPack\Script\NotUsed\Books.cs" />
     <Compile Include="Assets\Dnk_Dev\HospitalHorrorPack\Script\NotUsed\DoorOpen.cs" />
@@ -93,6 +95,7 @@
     <Compile Include="Assets\Dnk_Dev\HospitalHorrorPack\Script\Sharing\Player\Loading.cs" />
     <Compile Include="Assets\Dnk_Dev\HospitalHorrorPack\Script\Sharing\Player\MainMenu.cs" />
     <Compile Include="Assets\Dnk_Dev\HospitalHorrorPack\Script\Sharing\Player\OVRActionController.cs" />
+    <Compile Include="Assets\Dnk_Dev\HospitalHorrorPack\Script\Sharing\Player\VibrationManager.cs" />
     <Compile Include="Assets\Oculus\AudioManager\Scenes\Scripts\TestScript.cs" />
     <Compile Include="Assets\Oculus\AudioManager\Scripts\Audio\AmbienceEmitter.cs" />
     <Compile Include="Assets\Oculus\AudioManager\Scripts\Audio\AudioManager.cs" />

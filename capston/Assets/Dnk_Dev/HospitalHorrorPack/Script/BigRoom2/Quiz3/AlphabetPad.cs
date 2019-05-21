@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class AlphabetPad : MonoBehaviour
 {
-    //public GameObject item;
+    public GameObject item;
     public GameObject alphabetScreen;     //알파벳
 
     private bool doorOpen;                //문이 열렸는지 아닌지
@@ -84,14 +84,14 @@ public class AlphabetPad : MonoBehaviour
 
         if (doorOpen)
         {
-            //item.SetActive(true); //아이템 나타나고
+            item.SetActive(true); //아이템 나타나고
 
             var newRot = Quaternion.RotateTowards(transform.localRotation, Quaternion.Euler(0.0f, -90.0f, 0.0f), Time.deltaTime * 200);
             transform.localRotation = newRot; //문열림
         }
         else
         {
-            //item.SetActive(false);
+            item.SetActive(false);
         }
     }
 }
